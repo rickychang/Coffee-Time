@@ -12,9 +12,6 @@
 
 @property (nonatomic, strong) IBOutlet UILabel *label;
 
-@property (nonatomic, strong) IBOutlet UISlider *slider;
-
-@property (nonatomic, strong) IBOutlet UIProgressView *progressView;
 
 @end
 
@@ -26,7 +23,9 @@
     
     NSLog(@"View is loaded.");
     
-    self.view.backgroundColor = [UIColor grayColor];
+    [self setupModel];
+    
+    self.title = @"Root";
 }
 
 - (void)didReceiveMemoryWarning
@@ -46,13 +45,24 @@
     self.label.text = [NSString stringWithFormat:@"Button pressed at %@", date];
 }
 
--(IBAction)sliderValueChanged:(id)sender
+
+-(void)setTimerModel:(DGCTimerModel *)timerModel
 {
-    NSLog(@"Slider value changed to %f", self.slider.value);
+    _timerModel = timerModel;
     
-    // Update our progressView's progress to match
-    // the slider value.
-    self.progressView.progress = self.slider.value;
+    [self updateUserInterface];
 }
+
+-(void)setupModel
+{
+    self.timerModel = [[DGCTimerModel alloc]
+                       initWithCoffeeName:@"Columbian Coffee" duration:240];
+}
+
+-(void)updateUserInterface
+{
+    self.label.text = self.timerModel.coffeeName;
+}
+
 
 @end

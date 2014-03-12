@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DGCTimerModel.h"
 
 @interface DGCViewController : UIViewController
+
+@property (nonatomic, strong) DGCTimerModel *timerModel;
 
 @end
