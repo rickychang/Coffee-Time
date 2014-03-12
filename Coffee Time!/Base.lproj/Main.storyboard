@@ -28,9 +28,9 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="0h5-Md-ePG">
-                                <rect key="frame" x="20" y="69" width="280" height="40"/>
+                                <rect key="frame" x="20" y="73" width="280" height="34"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button">
+                                <state key="normal" title="Details">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -50,16 +50,28 @@
             </objects>
             <point key="canvasLocation" x="-23" y="-118"/>
         </scene>
-        <!--View Controller-->
+        <!--Timer Detail View Controller-->
         <scene sceneID="0tJ-EH-33s">
             <objects>
-                <viewController id="U1K-n3-mE1" sceneMemberID="viewController">
+                <viewController id="U1K-n3-mE1" customClass="DGCTimerDetailViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="R2E-93-ZVm">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="XbX-m5-5Kz">
+                                <rect key="frame" x="20" y="75" width="280" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="c2g-9I-YAe"/>
+                    <connections>
+                        <outlet property="durationLabel" destination="XbX-m5-5Kz" id="HOu-TJ-dF3"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dBn-kO-Sa8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

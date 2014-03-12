@@ -7,6 +7,7 @@
 //
 
 #import "DGCViewController.h"
+#import "DGCTimerDetailViewController.h"
 
 @interface DGCViewController ()
 
@@ -32,6 +33,17 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSLog(@"Preparing for segue with identifier:%@", segue.identifier);
+    if ([segue.identifier isEqualToString:@"pushDetail"])
+    {
+        DGCTimerDetailViewController *viewController =
+        segue.destinationViewController;
+        viewController.timerModel = self.timerModel;
+    }
 }
 
 -(IBAction)buttonWasPressed:(id)sender
