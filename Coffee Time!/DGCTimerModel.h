@@ -8,12 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum {
+    DGCTimerModelTypeCoffee = 0,
+    DGCTimerModelTypeTea
+}DGCTimerModelType;
+
 @interface DGCTimerModel : NSObject
 
-@property (nonatomic, strong) NSString *coffeeName;
+@property (nonatomic, strong) NSString *name;
 @property (nonatomic, assign) NSInteger duration;
+@property (nonatomic, assign) DGCTimerModelType type;
 
--(id)initWithCoffeeName:(NSString *)coffeeName
-               duration:(NSInteger)duration;
+-(id)initWithName:(NSString *)name
+         duration:(NSInteger)duration
+             type:(DGCTimerModelType)type;
 
 @end

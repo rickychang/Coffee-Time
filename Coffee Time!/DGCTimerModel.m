@@ -10,14 +10,16 @@
 
 @implementation DGCTimerModel
 
--(id)initWithCoffeeName:(NSString *)coffeeName
-               duration:(NSInteger)duration
+-(id)initWithName:(NSString *)name
+         duration:(NSInteger)duration
+             type: (DGCTimerModelType)type
 {
     self = [super init];
     if (self == nil) return nil;
     
-    self.coffeeName = coffeeName;
+    self.name = name;
     self.duration = duration;
+    self.type = type;
     
     return self;
 }

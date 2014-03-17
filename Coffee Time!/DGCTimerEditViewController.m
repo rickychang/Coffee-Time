@@ -10,6 +10,8 @@
 
 @interface DGCTimerEditViewController ()
 
+@property (nonatomic, strong) IBOutlet UISegmentedControl *timerTypeSegmentedControl;
+
 @end
 
 @implementation DGCTimerEditViewController
@@ -30,12 +32,20 @@
     NSInteger numberOfMinutes = self.timerModel.duration / 60;
     NSInteger numberOfSeconds = self.timerModel.duration % 60;
     
-    self.nameField.text = self.timerModel.coffeeName;
+    self.nameField.text = self.timerModel.name;
     self.minutesLabel.text = [NSString
                               stringWithFormat:@"%d Minutes", numberOfMinutes];
     self.secondsLabel.text = [NSString stringWithFormat:@"%d Seconds", numberOfSeconds];
     self.minutesSlider.value = numberOfMinutes;
     self.secondsSlider.value = numberOfSeconds;
+    if (self.timerModel.type == DGCTimerModelTypeCoffee)
+    {
+        self.timerTypeSegmentedControl.selectedSegmentIndex = 0;
+    }
+    else
+    {
+        self.timerTypeSegmentedControl.selectedSegmentIndex = 1;
+    }
     
 }
 
@@ -69,13 +79,15 @@
 
 -(IBAction)cancelButtonWasPressed:(id)sender
 {
-    NSLog(@"cancelButtonWasPressed.");
+    [self.delegate timerEditViewControllerDidCancel:self];
     [self.presentingViewController
      dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(IBAction)doneButtonWasPressed:(id)sender
 {
+    [self saveModel];
+    [self.delegate timerEditViewControllerDidSaveTimerModel:self];
     [self.presentingViewController
      dismissViewControllerAnimated:YES completion:nil];
 }
@@ -85,6 +97,25 @@
     NSInteger numberOfMinutes = (NSInteger)self.minutesSlider.value;
     NSInteger numberOfSeconds = (NSInteger)self.secondsSlider.value;
     [self updateLabelsWithMinutes:numberOfMinutes seconds:numberOfSeconds];
+}
+
+-(void)saveModel
+{
+    NSInteger mins = self.minutesSlider.value;
+    NSLog(@"calling save model: %d minute val", mins);
+    DGCTimerModelType type;
+    
+    if (self.timerTypeSegmentedControl.selectedSegmentIndex == 0)
+    {
+        type = DGCTimerModelTypeCoffee;
+    }
+    else
+    {
+        type = DGCTimerModelTypeTea;
+    }
+    self.timerModel.name = self.nameField.text;
+    self.timerModel.duration = (NSInteger)self.minutesSlider.value * 60 + (NSInteger)self.secondsSlider.value;
+    self.timerModel.type = type;
 }
 
 
