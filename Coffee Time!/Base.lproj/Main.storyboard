@@ -43,12 +43,12 @@
                     </view>
                     <navigationItem key="navigationItem" id="sOa-8K-zeY">
                         <barButtonItem key="leftBarButtonItem" title="Cancel" id="pV5-n1-O33"/>
-                        <barButtonItem key="rightBarButtonItem" title="Done" id="2Ez-NZ-0nF"/>
+                        <barButtonItem key="rightBarButtonItem" title="Done" style="done" id="2Ez-NZ-0nF"/>
                     </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-23" y="-118"/>
+            <point key="canvasLocation" x="46" y="-102"/>
         </scene>
         <!--Timer Detail View Controller-->
         <scene sceneID="0tJ-EH-33s">

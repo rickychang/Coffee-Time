@@ -226,6 +226,9 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "RIcky Chang";
 				TargetAttributes = {
+					9121208418D0D7850079F84A = {
+						DevelopmentTeam = 8D25K7ZJBP;
+					};
 					912120A518D0D7850079F84A = {
 						TestTargetID = 9121208418D0D7850079F84A;
 					};
@@ -407,6 +410,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Coffee Time!/Coffee Time!-Prefix.pch";
 				INFOPLIST_FILE = "Coffee Time!/Coffee Time!-Info.plist";
@@ -420,6 +424,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Coffee Time!/Coffee Time!-Prefix.pch";
 				INFOPLIST_FILE = "Coffee Time!/Coffee Time!-Info.plist";
@@ -489,6 +494,7 @@
 				912120B918D0D7850079F84A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		912120BA18D0D7850079F84A /* Build configuration list for PBXNativeTarget "Coffee Time!Tests" */ = {
 			isa = XCConfigurationList;
@@ -497,6 +503,7 @@
 				912120BC18D0D7850079F84A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
