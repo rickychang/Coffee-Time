@@ -38,6 +38,16 @@
                                     <segue destination="U1K-n3-mE1" kind="push" identifier="pushDetail" id="bGS-6u-9fY"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="EJs-dh-tge">
+                                <rect key="frame" x="145" y="115" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Edit">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="qgB-WJ-ol1" kind="modal" identifier="editDetail" id="CsZ-M4-IlU"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -49,6 +59,89 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="46" y="-102"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="SQz-sx-ZR4">
+            <objects>
+                <navigationController definesPresentationContext="YES" id="qgB-WJ-ol1" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="HfB-kC-AKE">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="raO-Mu-qKg" kind="relationship" relationship="rootViewController" id="mE9-bY-t4e"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vj5-V6-LFT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="22" y="-685"/>
+        </scene>
+        <!--Timer Edit View Controller-->
+        <scene sceneID="aIS-zK-17g">
+            <objects>
+                <viewController id="raO-Mu-qKg" customClass="DGCTimerEditViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="1hX-wg-vei">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Name of Coffee" minimumFontSize="17" id="maF-Vk-14h">
+                                <rect key="frame" x="20" y="84" width="280" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Minutes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fda-Ie-b1m">
+                                <rect key="frame" x="20" y="122" width="280" height="21"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="10" id="A1f-LY-EeV">
+                                <rect key="frame" x="18" y="151" width="284" height="34"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="sliderValueChanged:" destination="raO-Mu-qKg" eventType="valueChanged" id="nWu-PY-dBr"/>
+                                </connections>
+                            </slider>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="59" id="pZP-z1-NIt">
+                                <rect key="frame" x="18" y="221" width="284" height="34"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="sliderValueChanged:" destination="raO-Mu-qKg" eventType="valueChanged" id="6rN-1u-oBB"/>
+                                </connections>
+                            </slider>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Seconds" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="QSQ-jT-MKZ">
+                                <rect key="frame" x="20" y="192" width="280" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="kFi-ZV-xmc">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="FWl-aZ-tyo">
+                            <connections>
+                                <action selector="cancelButtonWasPressed:" destination="raO-Mu-qKg" id="x6V-DU-fR9"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="3Xv-ak-asI">
+                            <connections>
+                                <action selector="doneButtonWasPressed:" destination="raO-Mu-qKg" id="Pxc-EP-syI"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="minutesLabel" destination="fda-Ie-b1m" id="sCq-8E-Z09"/>
+                        <outlet property="minutesSlider" destination="A1f-LY-EeV" id="Tnt-3n-V0p"/>
+                        <outlet property="nameField" destination="maF-Vk-14h" id="Eiz-IU-8L6"/>
+                        <outlet property="secondsLabel" destination="QSQ-jT-MKZ" id="TWT-9h-hMn"/>
+                        <outlet property="secondsSlider" destination="pZP-z1-NIt" id="LJc-Nx-uVH"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zM5-fr-ZZR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="512" y="-691"/>
         </scene>
         <!--Timer Detail View Controller-->
         <scene sceneID="0tJ-EH-33s">

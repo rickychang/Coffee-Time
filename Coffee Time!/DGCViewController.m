@@ -8,6 +8,7 @@
 
 #import "DGCViewController.h"
 #import "DGCTimerDetailViewController.h"
+#import "DGCTimerEditViewController.h"
 
 @interface DGCViewController ()
 
@@ -42,6 +43,14 @@
     {
         DGCTimerDetailViewController *viewController =
         segue.destinationViewController;
+        viewController.timerModel = self.timerModel;
+    }
+    else if ([segue.identifier isEqualToString:@"editDetail"])
+    {
+        UINavigationController *navigationController =
+        segue.destinationViewController;
+        DGCTimerEditViewController *viewController =
+        (DGCTimerEditViewController *)(navigationController.topViewController);
         viewController.timerModel = self.timerModel;
     }
 }

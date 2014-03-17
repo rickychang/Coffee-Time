@@ -23,6 +23,7 @@
 		912120B418D0D7850079F84A /* Coffee_Time_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 912120B318D0D7850079F84A /* Coffee_Time_Tests.m */; };
 		912120BF18D0D8D50079F84A /* DGCTimerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 912120BE18D0D8D50079F84A /* DGCTimerModel.m */; };
 		912120C218D0E1CC0079F84A /* DGCTimerDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 912120C118D0E1CC0079F84A /* DGCTimerDetailViewController.m */; };
+		917761C318D74FAF006D70C9 /* DGCTimerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 917761C218D74FAF006D70C9 /* DGCTimerEditViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,8 @@
 		912120BE18D0D8D50079F84A /* DGCTimerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGCTimerModel.m; sourceTree = "<group>"; };
 		912120C018D0E1CC0079F84A /* DGCTimerDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGCTimerDetailViewController.h; sourceTree = "<group>"; };
 		912120C118D0E1CC0079F84A /* DGCTimerDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGCTimerDetailViewController.m; sourceTree = "<group>"; };
+		917761C118D74FAF006D70C9 /* DGCTimerEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGCTimerEditViewController.h; sourceTree = "<group>"; };
+		917761C218D74FAF006D70C9 /* DGCTimerEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGCTimerEditViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +168,8 @@
 				9121209E18D0D7850079F84A /* DGCViewController.m */,
 				912120C018D0E1CC0079F84A /* DGCTimerDetailViewController.h */,
 				912120C118D0E1CC0079F84A /* DGCTimerDetailViewController.m */,
+				917761C118D74FAF006D70C9 /* DGCTimerEditViewController.h */,
+				917761C218D74FAF006D70C9 /* DGCTimerEditViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -284,6 +289,7 @@
 				912120C218D0E1CC0079F84A /* DGCTimerDetailViewController.m in Sources */,
 				912120BF18D0D8D50079F84A /* DGCTimerModel.m in Sources */,
 				9121209F18D0D7850079F84A /* DGCViewController.m in Sources */,
+				917761C318D74FAF006D70C9 /* DGCTimerEditViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
