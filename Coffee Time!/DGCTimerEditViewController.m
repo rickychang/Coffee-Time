@@ -10,7 +10,7 @@
 
 @interface DGCTimerEditViewController ()
 
-@property (nonatomic, strong) IBOutlet UISegmentedControl *timerTypeSegmentedControl;
+@property (nonatomic, weak) IBOutlet UISegmentedControl *timerTypeSegmentedControl;
 
 @end
 

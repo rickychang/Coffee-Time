@@ -11,6 +11,6 @@
 
 @interface DGCTimerDetailViewController : UIViewController
 
-@property (nonatomic, strong) DGCTimerModel *timerModel;
+@property (nonatomic, weak) DGCTimerModel *timerModel;
 
 @end
