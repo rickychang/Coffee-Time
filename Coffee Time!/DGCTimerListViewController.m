@@ -35,6 +35,13 @@ enum {
 {
     [super viewDidLoad];
     
+    self.navigationController.navigationBar.barTintColor = [UIColor brownColor];
+    self.navigationController.navigationBar.translucent = NO;
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
+    self.title = @"Coffee Time!";
+
+    
     self.coffeeTimers = @[[[DGCTimerModel alloc] initWithName:@"Columbian" duration:240 type:DGCTimerModelTypeCoffee],
                           [[DGCTimerModel alloc] initWithName:@"Mexican" duration:200 type:DGCTimerModelTypeCoffee]];
     

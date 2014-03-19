@@ -11,11 +11,12 @@
 
 @interface DGCTimerDetailViewController ()
 
-@property (nonatomic, weak) IBOutlet UILabel *durationLabel;
 @property (nonatomic, weak) IBOutlet UILabel *countdownLabel;
 @property (nonatomic, weak) IBOutlet UIButton *startStopButton;
-@property (nonatomic, strong) NSTimer *timer;
+
+@property (nonatomic, weak) NSTimer *timer;
 @property (nonatomic, assign) NSInteger timeRemaining;
+
 @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
 
 @end
@@ -35,14 +36,17 @@
 {
     [super viewDidLoad];
     
+    self.navigationController.navigationBar.barTintColor = [UIColor brownColor];
+    self.navigationController.navigationBar.translucent = NO;
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+
+
 	
     self.title = self.timerModel.name;
-    
-    self.durationLabel.text = [NSString stringWithFormat:@"%d min %d sec",
+
+    self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
                                self.timerModel.duration / 60,
                                self.timerModel.duration % 60];
-    
-    self.countdownLabel.text = @"Timer not started.";
     
     [self.timerModel addObserver:self
                       forKeyPath:@"duration"
@@ -67,22 +71,30 @@
         // Timer is running and button is pressed. Stop timer.
         
         [self.navigationItem setHidesBackButton:NO animated:YES];
-        self.countdownLabel.text = @"Timer stopped.";
+        self.timeRemaining = self.timerModel.duration;
+        self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
+                                    self.timeRemaining / 60,
+                                    self.timeRemaining % 60];
         [self.startStopButton setTitle:@"Start" forState:UIControlStateNormal];
+        [self.startStopButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
+        NSLog(@"Ending backgroundTaskId: %d", self.backgroundTaskIdentifier);
         [self.timer invalidate];
-        self.timer = nil;
     }
     else
     {
         [self.navigationItem setHidesBackButton:YES animated:YES];
         [self.startStopButton setTitle:@"Stop" forState:UIControlStateNormal];
+        [self.startStopButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         self.timeRemaining = self.timerModel.duration;
         self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
                                     self.timeRemaining / 60,
                                     self.timeRemaining % 60];
         self.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-            [self notifyUser:@"Coffee Timer stopped running."];
+            NSInteger timeRemaining = [[UIApplication sharedApplication] backgroundTimeRemaining];
+            NSLog(@"Killing background task: background time remaining: %d", timeRemaining);
         }];
+        NSLog(@"Created backgroundTaskId: %d", self.backgroundTaskIdentifier);
         self.timer = [NSTimer scheduledTimerWithTimeInterval:1
                                                       target:self
                                                     selector:@selector(timerFired:)
@@ -94,6 +106,11 @@
 -(void)timerFired:(NSTimer *)timer
 {
     self.timeRemaining -= 1;
+    if (self.timeRemaining % 20 == 0)
+    {
+        NSInteger timeRemaining = [[UIApplication sharedApplication] backgroundTimeRemaining];
+        NSLog(@"background time remaining: %d", timeRemaining);
+    }
     if (self.timeRemaining > 0)
     {
         self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
@@ -103,10 +120,13 @@
     else
     {
         self.countdownLabel.text = @"Timer completed.";
-        [self.timer invalidate];
-        self.timer = nil;
+        NSLog(@"Timer complete.");
         [self notifyUser:@"Coffee Timer Completed!"];
         [self.startStopButton setTitle:@"Start" forState:UIControlStateNormal];
+        [self.startStopButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
+        NSLog(@"timerFired -> Ending backgroundTaskId: %d", self.backgroundTaskIdentifier);
+        [self.timer invalidate];
         [self.navigationItem setHidesBackButton:NO animated:YES];
     }
 }
@@ -115,7 +135,7 @@
 {
     if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
     {
-        [[[UIAlertView alloc] initWithTitle:@"Coffee Timer"
+        [[[UIAlertView alloc] initWithTitle:@"Coffee Time!"
                                     message:alert
                                    delegate:nil
                           cancelButtonTitle:nil
@@ -153,9 +173,9 @@
 {
     if ([keyPath isEqualToString:@"duration"])
     {
-            self.durationLabel.text = [NSString stringWithFormat:@"%d min %d sec",
-                                       self.timerModel.duration / 60,
-                                       self.timerModel.duration % 60];
+        self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
+                                    self.timeRemaining / 60,
+                                    self.timeRemaining % 60];
     }
     else if ([keyPath isEqualToString:@"name"])
     {

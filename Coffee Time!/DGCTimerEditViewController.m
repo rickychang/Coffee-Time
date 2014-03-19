@@ -28,6 +28,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.navigationController.navigationBar.barTintColor = [UIColor brownColor];
+    self.navigationController.navigationBar.translucent = NO;
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
+    self.title = self.timerModel.name;
+
 	
     NSInteger numberOfMinutes = self.timerModel.duration / 60;
     NSInteger numberOfSeconds = self.timerModel.duration % 60;
