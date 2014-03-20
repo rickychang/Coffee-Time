@@ -41,15 +41,14 @@ enum {
     
     self.title = @"Coffee Time!";
 
-    
-    self.coffeeTimers = @[[[DGCTimerModel alloc] initWithName:@"Columbian" duration:240 type:DGCTimerModelTypeCoffee],
-                          [[DGCTimerModel alloc] initWithName:@"Mexican" duration:200 type:DGCTimerModelTypeCoffee]];
-    
-    self.teaTimers = @[[[DGCTimerModel alloc] initWithName:@"Green Tea" duration:400 type:DGCTimerModelTypeTea],
-                       [[DGCTimerModel alloc] initWithName:@"Oolong" duration:400 type:DGCTimerModelTypeTea],
-                       [[DGCTimerModel alloc] initWithName:@"Rooibos" duration:400 type:DGCTimerModelTypeTea]];
-    
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
+    
+    NSError *fetchError;
+    if (![self.fetchedResultsController performFetch:&fetchError])
+    {
+        NSLog(@"Error fetching: %@", fetchError);
+    }
+    
 }
 - (void)didReceiveMemoryWarning
 {
@@ -62,22 +61,15 @@ enum {
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return DGCTimerListNumberOfSections;
+    return self.fetchedResultsController.sections.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    if (section == DGCTimerListCoffeeSection)
-    {
-        return self.coffeeTimers.count;
-    }
-    else if (section == DGCTimerListTeaSection)
-    {
-        return self.teaTimers.count;
-    }
+    id<NSFetchedResultsSectionInfo> sectionInfo = self.fetchedResultsController.sections[section];
     
-    return 0;
+    return sectionInfo.numberOfObjects;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -132,11 +124,15 @@ enum {
     {
         if ([segue.identifier isEqualToString:@"newTimer"])
         {
+            NSManagedObjectContext *managedObjectContext = [(DGCAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+            DGCTimerModel *model = [NSEntityDescription insertNewObjectForEntityForName:@"DGCTimerModel"
+                                                                 inManagedObjectContext:managedObjectContext];
+            
             UINavigationController *navController = segue.destinationViewController;
             DGCTimerEditViewController *viewController = (DGCTimerEditViewController *)navController.topViewController;
             viewController.creatingNewTimer = YES;
             viewController.delegate = self;
-            viewController.timerModel = [[DGCTimerModel alloc] initWithName:@"" duration:240 type:DGCTimerModelTypeCoffee];
+            viewController.timerModel = model;
         }
     }
 }
@@ -175,54 +171,22 @@ enum {
 
 -(void)timerEditViewControllerDidSaveTimerModel:(DGCTimerEditViewController *)viewController;
 {
-    DGCTimerModelType type = viewController.timerModel.type;
-    
-    if (type == DGCTimerModelTypeCoffee)
-    {
-        if (![self.coffeeTimers containsObject:viewController.timerModel])
-        {
-            self.coffeeTimers = [self.coffeeTimers arrayByAddingObject:viewController.timerModel];
-        }
-        
-        if ([self.teaTimers containsObject: viewController.timerModel])
-        {
-            NSMutableArray *mutableArray = [self.teaTimers mutableCopy];
-            [mutableArray removeObject:viewController.timerModel];
-            self.teaTimers = [NSArray arrayWithArray:mutableArray];
-        }
-    }
-    else if (type == DGCTimerModelTypeTea)
-    {
-        if (![self.teaTimers containsObject:viewController.timerModel])
-        {
-            self.teaTimers = [self.teaTimers arrayByAddingObject:viewController.timerModel];
-        }
-        
-        if ([self.coffeeTimers containsObject:viewController.timerModel])
-        {
-            NSMutableArray *mutableArray = [self.coffeeTimers mutableCopy];
-            [mutableArray removeObject:viewController.timerModel];
-            self.coffeeTimers = [NSArray arrayWithArray:mutableArray];
-        }
-    }
+    [viewController.timerModel.managedObjectContext save:nil];
 }
 
 -(void)timerEditViewControllerDidCancel:(DGCTimerEditViewController *)viewController
 {
+    if (viewController.creatingNewTimer)
+    {
+        [viewController.timerModel.managedObjectContext deleteObject:viewController.timerModel];
+    }
     
 }
 
 -(DGCTimerModel*)timerModelForIndexPath:(NSIndexPath *)indexPath
 {
-    DGCTimerModel *timerModel;
-    if (indexPath.section == DGCTimerListCoffeeSection)
-    {
-        timerModel = self.coffeeTimers[indexPath.row];
-    }
-    else if (indexPath.section == DGCTimerListTeaSection)
-    {
-        timerModel = self.teaTimers[indexPath.row];
-    }
+    DGCTimerModel *timerModel = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
     return timerModel;
 }
 
@@ -230,21 +194,8 @@ enum {
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-        if (indexPath.section == DGCTimerListCoffeeSection)
-        {
-            NSMutableArray *mutableArray = [self.coffeeTimers mutableCopy];
-            [mutableArray removeObjectAtIndex:indexPath.row];
-            self.coffeeTimers = [NSArray arrayWithArray:mutableArray];
-        }
-        
-        else if (indexPath.section == DGCTimerListTeaSection)
-        {
-            NSMutableArray *mutableArray = [self.teaTimers mutableCopy];
-            [mutableArray removeObjectAtIndex:indexPath.row];
-            self.teaTimers = [NSArray arrayWithArray:mutableArray];
-        }
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        
+        DGCTimerModel *timerModel = [self timerModelForIndexPath:indexPath];
+        [timerModel.managedObjectContext deleteObject:timerModel];
     }
 }
 
@@ -265,28 +216,24 @@ enum {
 
 -(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
-    NSMutableArray *mutableArray;
-    if (sourceIndexPath.section == DGCTimerListCoffeeSection)
+    self.userReorderingCells = YES;
+    
+    NSMutableArray *sectionObjects = [[[self.fetchedResultsController sections][sourceIndexPath.section] objects] mutableCopy];
+    
+    NSManagedObject *movedObject = [[self fetchedResultsController] objectAtIndexPath:sourceIndexPath];
+    
+    [sectionObjects removeObject:movedObject];
+    
+    [sectionObjects insertObject:movedObject atIndex:destinationIndexPath.row];
+    
+    for (NSInteger i = 0; i < sectionObjects.count; i++)
     {
-        mutableArray = [self.coffeeTimers mutableCopy];
-    }
-    else if (sourceIndexPath.section == DGCTimerListTeaSection)
-    {
-        mutableArray = [self.teaTimers mutableCopy];
+        DGCTimerModel *model = sectionObjects[i];
+        model.displayOrder = (int) i;
     }
     
-    DGCTimerModel *model = mutableArray[sourceIndexPath.row];
-    [mutableArray removeObjectAtIndex:sourceIndexPath.row];
-    [mutableArray insertObject:model atIndex:destinationIndexPath.row];
-    
-    if (sourceIndexPath.section == DGCTimerListCoffeeSection)
-    {
-        self.coffeeTimers = [NSArray arrayWithArray:mutableArray];
-    }
-    else if (sourceIndexPath.section == DGCTimerListTeaSection)
-    {
-        self.teaTimers = [NSArray arrayWithArray:mutableArray];
-    }
+    [movedObject.managedObjectContext save:nil];
+    self.userReorderingCells = NO;
 }
 
 -(NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
@@ -298,11 +245,12 @@ enum {
     
     if (sourceIndexPath.section == DGCTimerListCoffeeSection)
     {
-        return [NSIndexPath indexPathForRow:self.coffeeTimers.count - 1 inSection:0];
+        NSInteger numberOfCells = [self.fetchedResultsController.sections[DGCTimerListCoffeeSection] numberOfObjects];
+        return [NSIndexPath indexPathForRow:numberOfCells - 1 inSection:DGCTimerListCoffeeSection];
     }
     else if (sourceIndexPath.section == DGCTimerListTeaSection)
     {
-        return [NSIndexPath indexPathForRow:0 inSection:1];
+        return [NSIndexPath indexPathForRow:0 inSection:DGCTimerListTeaSection];
     }
     
     return sourceIndexPath;
@@ -314,6 +262,64 @@ enum {
     UIPasteboard *sharedPasteboard = [UIPasteboard generalPasteboard];
     [sharedPasteboard setString:timerModel.name];
 }
+
+-(NSFetchedResultsController *)fetchedResultsController
+{
+    if (!_fetchedResultsController)
+    {
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"DGCTimerModel"];
+        fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"type" ascending:YES],
+                                         [NSSortDescriptor sortDescriptorWithKey:@"displayOrder" ascending:YES]];
+        NSManagedObjectContext *managedObjectConext =
+        [(DGCAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+        _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:managedObjectConext sectionNameKeyPath:@"type" cacheName:nil];
+        _fetchedResultsController.delegate = self;
+    }
+    
+    return _fetchedResultsController;
+}
+
+-(void)controller:(NSFetchedResultsController *)controller
+  didChangeObject:(id)anObject
+      atIndexPath:(NSIndexPath *)indexPath
+    forChangeType:(NSFetchedResultsChangeType)type
+     newIndexPath:(NSIndexPath *)newIndexPath
+{
+    if (self.userReorderingCells) return;
+    
+    switch(type)
+    {
+        case NSFetchedResultsChangeInsert:
+            [self.tableView insertRowsAtIndexPaths:@[newIndexPath]
+                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+            break;
+        case NSFetchedResultsChangeDelete:
+            [self.tableView deleteRowsAtIndexPaths:@[indexPath]
+                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+            break;
+        case NSFetchedResultsChangeUpdate:
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath]
+                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+            break;
+        case NSFetchedResultsChangeMove:
+            [self.tableView moveRowAtIndexPath:indexPath toIndexPath:newIndexPath];
+            break;
+    }
+}
+
+-(void)controllerWillChangeContent:(NSFetchedResultsController *)controller
+{
+    if (self.userReorderingCells) return;
+    [self.tableView beginUpdates];
+}
+
+-(void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+{
+    if (self.userReorderingCells) return;
+    [self.tableView endUpdates];
+}
+
+
 
 /*
  // Override to support conditional editing of the table view.

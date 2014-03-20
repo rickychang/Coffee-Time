@@ -9,10 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "DGCTimerModel.h"
 #import "DGCTimerEditViewController.h"
+#import "DGCAppDelegate.h"
 
-@interface DGCTimerListViewController : UITableViewController <DGCTimerEditViewControllerDelegate>
+@interface DGCTimerListViewController : UITableViewController <DGCTimerEditViewControllerDelegate, NSFetchedResultsControllerDelegate>
 
-@property (nonatomic, strong) NSArray *coffeeTimers;
-@property (nonatomic, strong) NSArray *teaTimers;
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, assign) BOOL userReorderingCells;
 
 @end

@@ -43,10 +43,17 @@
 
 	
     self.title = self.timerModel.name;
+    NSLog(@"viewDidLoad for detail view called");
+    NSInteger countdownRemaining = self.timerModel.duration;
+    NSLog(@"Timer duration: %d", self.timerModel.duration);
+    if (self.timer)
+    {
+        countdownRemaining = self.timeRemaining;
+    }
 
     self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
-                               self.timerModel.duration / 60,
-                               self.timerModel.duration % 60];
+                               countdownRemaining / 60,
+                               countdownRemaining % 60];
     
     [self.timerModel addObserver:self
                       forKeyPath:@"duration"
@@ -119,7 +126,9 @@
     }
     else
     {
-        self.countdownLabel.text = @"Timer completed.";
+        self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
+                                    self.timerModel.duration / 60,
+                                    self.timerModel.duration % 60];
         NSLog(@"Timer complete.");
         [self notifyUser:@"Coffee Timer Completed!"];
         [self.startStopButton setTitle:@"Start" forState:UIControlStateNormal];
@@ -174,8 +183,8 @@
     if ([keyPath isEqualToString:@"duration"])
     {
         self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
-                                    self.timeRemaining / 60,
-                                    self.timeRemaining % 60];
+                                    self.timerModel.duration / 60,
+                                    self.timerModel.duration % 60];
     }
     else if ([keyPath isEqualToString:@"name"])
     {

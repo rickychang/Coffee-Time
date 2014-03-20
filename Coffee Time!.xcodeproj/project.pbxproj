@@ -20,10 +20,12 @@
 		912120AA18D0D7850079F84A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9121208C18D0D7850079F84A /* UIKit.framework */; };
 		912120B218D0D7850079F84A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 912120B018D0D7850079F84A /* InfoPlist.strings */; };
 		912120B418D0D7850079F84A /* Coffee_Time_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 912120B318D0D7850079F84A /* Coffee_Time_Tests.m */; };
-		912120BF18D0D8D50079F84A /* DGCTimerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 912120BE18D0D8D50079F84A /* DGCTimerModel.m */; };
 		912120C218D0E1CC0079F84A /* DGCTimerDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 912120C118D0E1CC0079F84A /* DGCTimerDetailViewController.m */; };
 		917761C318D74FAF006D70C9 /* DGCTimerEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 917761C218D74FAF006D70C9 /* DGCTimerEditViewController.m */; };
 		917761C618D75B66006D70C9 /* DGCTimerListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 917761C518D75B66006D70C9 /* DGCTimerListViewController.m */; };
+		91A8A7CC18DA387100E4DDFB /* CoffeeTime.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 91A8A7CA18DA387100E4DDFB /* CoffeeTime.xcdatamodeld */; };
+		91A8A7CF18DA3B3600E4DDFB /* DGCTimerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A8A7CE18DA3B3600E4DDFB /* DGCTimerModel.m */; };
+		91C72DD218DA307C00FBA84B /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91C72DD118DA307C00FBA84B /* CoreData.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,14 +56,16 @@
 		912120AF18D0D7850079F84A /* Coffee Time!Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Coffee Time!Tests-Info.plist"; sourceTree = "<group>"; };
 		912120B118D0D7850079F84A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		912120B318D0D7850079F84A /* Coffee_Time_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Coffee_Time_Tests.m; sourceTree = "<group>"; };
-		912120BD18D0D8D50079F84A /* DGCTimerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGCTimerModel.h; sourceTree = "<group>"; };
-		912120BE18D0D8D50079F84A /* DGCTimerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGCTimerModel.m; sourceTree = "<group>"; };
 		912120C018D0E1CC0079F84A /* DGCTimerDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGCTimerDetailViewController.h; sourceTree = "<group>"; };
 		912120C118D0E1CC0079F84A /* DGCTimerDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DGCTimerDetailViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		917761C118D74FAF006D70C9 /* DGCTimerEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = DGCTimerEditViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		917761C218D74FAF006D70C9 /* DGCTimerEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = DGCTimerEditViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		917761C418D75B66006D70C9 /* DGCTimerListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGCTimerListViewController.h; sourceTree = "<group>"; };
 		917761C518D75B66006D70C9 /* DGCTimerListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGCTimerListViewController.m; sourceTree = "<group>"; };
+		91A8A7CB18DA387100E4DDFB /* CoffeeTime.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoffeeTime.xcdatamodel; sourceTree = "<group>"; };
+		91A8A7CD18DA3B3600E4DDFB /* DGCTimerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGCTimerModel.h; sourceTree = "<group>"; };
+		91A8A7CE18DA3B3600E4DDFB /* DGCTimerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGCTimerModel.m; sourceTree = "<group>"; };
+		91C72DD118DA307C00FBA84B /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91C72DD218DA307C00FBA84B /* CoreData.framework in Frameworks */,
 				9121208B18D0D7850079F84A /* CoreGraphics.framework in Frameworks */,
 				9121208D18D0D7850079F84A /* UIKit.framework in Frameworks */,
 				9121208918D0D7850079F84A /* Foundation.framework in Frameworks */,
@@ -110,6 +115,7 @@
 		9121208718D0D7850079F84A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				91C72DD118DA307C00FBA84B /* CoreData.framework */,
 				9121208818D0D7850079F84A /* Foundation.framework */,
 				9121208A18D0D7850079F84A /* CoreGraphics.framework */,
 				9121208C18D0D7850079F84A /* UIKit.framework */,
@@ -123,6 +129,7 @@
 			children = (
 				9121209718D0D7850079F84A /* DGCAppDelegate.h */,
 				9121209818D0D7850079F84A /* DGCAppDelegate.m */,
+				91A8A7CA18DA387100E4DDFB /* CoffeeTime.xcdatamodeld */,
 				9121209A18D0D7850079F84A /* Main.storyboard */,
 				912120C318D0E27E0079F84A /* View Controllers */,
 				912120C418D0E29D0079F84A /* Models */,
@@ -177,8 +184,8 @@
 		912120C418D0E29D0079F84A /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				912120BD18D0D8D50079F84A /* DGCTimerModel.h */,
-				912120BE18D0D8D50079F84A /* DGCTimerModel.m */,
+				91A8A7CD18DA3B3600E4DDFB /* DGCTimerModel.h */,
+				91A8A7CE18DA3B3600E4DDFB /* DGCTimerModel.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -287,8 +294,9 @@
 				9121209518D0D7850079F84A /* main.m in Sources */,
 				9121209918D0D7850079F84A /* DGCAppDelegate.m in Sources */,
 				912120C218D0E1CC0079F84A /* DGCTimerDetailViewController.m in Sources */,
-				912120BF18D0D8D50079F84A /* DGCTimerModel.m in Sources */,
 				917761C318D74FAF006D70C9 /* DGCTimerEditViewController.m in Sources */,
+				91A8A7CF18DA3B3600E4DDFB /* DGCTimerModel.m in Sources */,
+				91A8A7CC18DA387100E4DDFB /* CoffeeTime.xcdatamodeld in Sources */,
 				917761C618D75B66006D70C9 /* DGCTimerListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -508,6 +516,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		91A8A7CA18DA387100E4DDFB /* CoffeeTime.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				91A8A7CB18DA387100E4DDFB /* CoffeeTime.xcdatamodel */,
+			);
+			currentVersion = 91A8A7CB18DA387100E4DDFB /* CoffeeTime.xcdatamodel */;
+			path = CoffeeTime.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 9121207D18D0D7850079F84A /* Project object */;
 }

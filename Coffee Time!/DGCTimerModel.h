@@ -2,25 +2,24 @@
 //  DGCTimerModel.h
 //  Coffee Time!
 //
-//  Created by RIcky Chang on 3/12/14.
+//  Created by RIcky Chang on 3/19/14.
 //  Copyright (c) 2014 RIcky Chang. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-typedef enum {
+typedef enum : int32_t {
     DGCTimerModelTypeCoffee = 0,
     DGCTimerModelTypeTea
 }DGCTimerModelType;
 
-@interface DGCTimerModel : NSObject
 
-@property (nonatomic, strong) NSString *name;
-@property (nonatomic, assign) NSInteger duration;
-@property (nonatomic, assign) DGCTimerModelType type;
+@interface DGCTimerModel : NSManagedObject
 
--(id)initWithName:(NSString *)name
-         duration:(NSInteger)duration
-             type:(DGCTimerModelType)type;
+@property (nonatomic, retain) NSString * name;
+@property (nonatomic) int32_t duration;
+@property (nonatomic) int32_t type;
+@property (nonatomic) int32_t displayOrder;
 
 @end
