@@ -24,20 +24,20 @@ typedef enum {
 
 @end
 
-@interface DGCTimerEditViewController : UIViewController
+@interface DGCTimerEditViewController : UIViewController<UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property (nonatomic, strong) DGCTimerModel *timerModel;
 @property (nonatomic, weak) IBOutlet UITextField *nameField;
 @property (nonatomic, weak) IBOutlet UILabel *minutesLabel;
 @property (nonatomic, weak) IBOutlet UILabel *secondsLabel;
-@property (nonatomic, weak) IBOutlet UISlider *minutesSlider;
-@property (nonatomic, weak) IBOutlet UISlider *secondsSlider;
+@property (nonatomic, weak) IBOutlet UIPickerView *durationPicker;
+
 @property (nonatomic, assign) BOOL creatingNewTimer;
 @property (nonatomic, weak) id <DGCTimerEditViewControllerDelegate> delegate;
 
 
 -(IBAction)cancelButtonWasPressed:(id)sender;
 -(IBAction)doneButtonWasPressed:(id)sender;
--(IBAction)sliderValueChanged:(id)sender;
+-(IBAction)textFieldReturn:(id)sender;
 
 @end

@@ -11,6 +11,8 @@
 @interface DGCTimerEditViewController ()
 
 @property (nonatomic, weak) IBOutlet UISegmentedControl *timerTypeSegmentedControl;
+@property (nonatomic, strong) NSArray *minuteArray;
+@property (nonatomic, strong) NSArray *secondsArray;
 
 @end
 
@@ -25,9 +27,21 @@
     return self;
 }
 
+-(NSArray *)genArrayOverRange:(NSInteger)start end:(NSInteger)end{
+    NSMutableArray *array = [NSMutableArray array];
+    for(int i=start; i<=end; i++) {
+        [array addObject:@(i)]; // @() is the modern objective-c syntax, to box the value into an NSNumber.
+    }
+    return array;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.minuteArray = [self genArrayOverRange:0 end:9];
+    self.secondsArray = [self genArrayOverRange:0 end:59];
+    
     
     self.navigationController.navigationBar.barTintColor = [UIColor brownColor];
     self.navigationController.navigationBar.translucent = NO;
@@ -39,12 +53,10 @@
     NSInteger numberOfMinutes = self.timerModel.duration / 60;
     NSInteger numberOfSeconds = self.timerModel.duration % 60;
     
+    [self.durationPicker selectRow:numberOfMinutes inComponent:0 animated:NO];
+    [self.durationPicker selectRow:numberOfSeconds inComponent:1 animated:NO];
+    
     self.nameField.text = self.timerModel.name;
-    self.minutesLabel.text = [NSString
-                              stringWithFormat:@"%d Minutes", numberOfMinutes];
-    self.secondsLabel.text = [NSString stringWithFormat:@"%d Seconds", numberOfSeconds];
-    self.minutesSlider.value = numberOfMinutes;
-    self.secondsSlider.value = numberOfSeconds;
     if (self.timerModel.type == DGCTimerModelTypeCoffee)
     {
         self.timerTypeSegmentedControl.selectedSegmentIndex = 0;
@@ -61,20 +73,11 @@
 {
     if (numberOfMinutes == 1)
     {
-        self.minutesLabel.text = @"1 Minute";
+        self.minutesLabel.text = @"Minute";
     }
     else
     {
-        self.minutesLabel.text = [NSString stringWithFormat:@"%d Minutes", numberOfMinutes];
-    }
-    
-    if (numberOfSeconds == 1)
-    {
-        self.secondsLabel.text = @"1 Second";
-    }
-    else
-    {
-        self.secondsLabel.text = [NSString stringWithFormat:@"%d Seconds", numberOfSeconds];
+        self.minutesLabel.text = @"Minutes";
     }
 }
 
@@ -99,17 +102,8 @@
      dismissViewControllerAnimated:YES completion:nil];
 }
 
--(IBAction)sliderValueChanged:(id)sender
-{
-    NSInteger numberOfMinutes = (NSInteger)self.minutesSlider.value;
-    NSInteger numberOfSeconds = (NSInteger)self.secondsSlider.value;
-    [self updateLabelsWithMinutes:numberOfMinutes seconds:numberOfSeconds];
-}
-
 -(void)saveModel
 {
-    NSInteger mins = self.minutesSlider.value;
-    NSLog(@"calling save model: %d minute val", mins);
     DGCTimerModelType type;
     
     if (self.timerTypeSegmentedControl.selectedSegmentIndex == 0)
@@ -121,8 +115,71 @@
         type = DGCTimerModelTypeTea;
     }
     self.timerModel.name = self.nameField.text;
-    self.timerModel.duration = (NSInteger)self.minutesSlider.value * 60 + (NSInteger)self.secondsSlider.value;
+    self.timerModel.duration = [self.durationPicker selectedRowInComponent:0]* 60 + [self.durationPicker selectedRowInComponent:1];
     self.timerModel.type = type;
+}
+
+
+-(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 2;
+}
+
+-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    if(component == 0)
+    {
+        return self.minuteArray.count;
+    }
+    else
+    {
+        return self.secondsArray.count;
+
+    }
+}
+
+-(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row   forComponent:(NSInteger)component
+{
+    if (component == 0)
+    {
+        return [NSString stringWithFormat:@"%@", self.minuteArray[row]];
+        
+    }
+    else
+    {
+        return [NSString stringWithFormat:@"%@", self.secondsArray[row]];
+    }
+}
+
+
+#pragma mark -
+#pragma mark PickerView Delegate
+-(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row
+      inComponent:(NSInteger)component
+{
+    if (component == 0)
+    {
+        if (row == 1)
+        {
+            self.minutesLabel.text = @"Minute";
+        }
+        else
+        {
+            self.minutesLabel.text = @"Minutes";
+        }
+        NSLog(@"selected minute: %@", self.minuteArray[row]);
+        
+    }
+    else
+    {
+        NSLog(@"selected second: %@", self.secondsArray[row]);
+    }
+}
+
+-(IBAction)textFieldReturn:(id)sender
+{
+    self.title = self.nameField.text;
+    [sender resignFirstResponder];
 }
 
 
