@@ -80,6 +80,14 @@
     }
 }
 
+-(void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    [self.scrollView layoutIfNeeded];
+    NSLog(@"contentView size: %f x %f", self.contentView.bounds.size.width, self.contentView.bounds.size.height);
+    self.scrollView.contentSize = self.contentView.bounds.size;
+}
+
 - (void)updateLabelsWithMinutes:(NSInteger)numberOfMinutes
                         seconds:(NSInteger)numberOfSeconds
 {

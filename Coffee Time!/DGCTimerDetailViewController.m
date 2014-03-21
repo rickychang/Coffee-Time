@@ -78,6 +78,12 @@
                          context:nil];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [self updateWaterCoffeeLabels];
+}
+
 -(void)updateWaterCoffeeLabels
 {
     NSLog(@"update water coffee labels");
@@ -109,7 +115,7 @@
             break;
         case DGCTableSpoonsUnit:
             self.coffeeUnitsLabel.text = @"tbsp";
-            self.coffeeAmountLabel.text = [NSString stringWithFormat:@"%1.2f", [DGCConversionUtils convertGramsToTablespoons:coffeeGrams]];
+            self.coffeeAmountLabel.text = [NSString stringWithFormat:@"%1.1f", [DGCConversionUtils convertGramsToTablespoons:coffeeGrams]];
             break;
         default:
             break;
