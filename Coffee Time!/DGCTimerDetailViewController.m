@@ -194,6 +194,11 @@
 
 -(IBAction)sliderValueChanged:(id)sender
 {
+    // if current water units are grams step in increments of 10.
+    if (self.timerModel.waterDisplayUnits == DGCGramsUnit)
+    {
+        [self.waterAmountSlider setValue:((int)((self.waterAmountSlider.value + 5) / 10) * 10) animated:NO];
+    }
     self.timerModel.water = self.waterAmountSlider.value;
     [self updateWaterCoffeeUI];
 }

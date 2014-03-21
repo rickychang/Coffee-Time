@@ -43,17 +43,17 @@
                     model.name = NSLocalizedString(@"Pour Over", @"Default Pour Over coffee name");
                     model.duration = 180;
                     model.waterDisplayUnits = DGCFluidOuncesUnit;
-                    model.water = 6;
+                    model.water = 10;
                     model.coffeeDisplayUnits = DGCGramsUnit;
                     model.coffeeToWaterRatio = 0.06829268292683f;
                     break;
                 case 2:
                     model.name = NSLocalizedString(@"Aeropress", @"Default Aeropress name");
                     model.duration = 60;
-                    model.waterDisplayUnits = DGCFluidOuncesUnit;
-                    model.water = 6;
+                    model.waterDisplayUnits = DGCGramsUnit;
+                    model.water = 100;
                     model.coffeeDisplayUnits = DGCGramsUnit;
-                    model.coffeeToWaterRatio = 0.06829268292683f;
+                    model.coffeeToWaterRatio = 0.29896907216495f;
                     break;
             }
         }
