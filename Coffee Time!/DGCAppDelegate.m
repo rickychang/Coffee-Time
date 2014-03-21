@@ -27,23 +27,20 @@
             DGCTimerModel *model = [NSEntityDescription
                                     insertNewObjectForEntityForName:@"DGCTimerModel"
                                     inManagedObjectContext:self.managedObjectContext];
-            model.displayOrder = i;
+            model.displayOrder = (int)i;
             switch (i) {
                 case 0:
                     model.name = NSLocalizedString(@"French Press", @"Default French Press coffee name");
                     model.duration = 240;
-                    model.type = DGCTimerModelTypeCoffee;
                     break;
                     
                 case 1:
                     model.name = NSLocalizedString(@"Pour Over", @"Default Pour Over coffee name");
                     model.duration = 180;
-                    model.type = DGCTimerModelTypeCoffee;
                     break;
                 case 2:
                     model.name = NSLocalizedString(@"Green Tea", @"Default Green Tea tea name");
                     model.duration = 300;
-                    model.type = DGCTimerModelTypeTea;
                     break;
             }
         }

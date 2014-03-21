@@ -25,6 +25,7 @@
 		917761C618D75B66006D70C9 /* DGCTimerListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 917761C518D75B66006D70C9 /* DGCTimerListViewController.m */; };
 		91A8A7CC18DA387100E4DDFB /* CoffeeTime.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 91A8A7CA18DA387100E4DDFB /* CoffeeTime.xcdatamodeld */; };
 		91A8A7CF18DA3B3600E4DDFB /* DGCTimerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A8A7CE18DA3B3600E4DDFB /* DGCTimerModel.m */; };
+		91A8A7D218DB92B600E4DDFB /* DGCConversionUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 91A8A7D118DB92B600E4DDFB /* DGCConversionUtils.m */; };
 		91C72DD218DA307C00FBA84B /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91C72DD118DA307C00FBA84B /* CoreData.framework */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +66,8 @@
 		91A8A7CB18DA387100E4DDFB /* CoffeeTime.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoffeeTime.xcdatamodel; sourceTree = "<group>"; };
 		91A8A7CD18DA3B3600E4DDFB /* DGCTimerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGCTimerModel.h; sourceTree = "<group>"; };
 		91A8A7CE18DA3B3600E4DDFB /* DGCTimerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGCTimerModel.m; sourceTree = "<group>"; };
+		91A8A7D018DB92B600E4DDFB /* DGCConversionUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DGCConversionUtils.h; sourceTree = "<group>"; };
+		91A8A7D118DB92B600E4DDFB /* DGCConversionUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DGCConversionUtils.m; sourceTree = "<group>"; };
 		91C72DD118DA307C00FBA84B /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -177,6 +180,8 @@
 				917761C218D74FAF006D70C9 /* DGCTimerEditViewController.m */,
 				917761C418D75B66006D70C9 /* DGCTimerListViewController.h */,
 				917761C518D75B66006D70C9 /* DGCTimerListViewController.m */,
+				91A8A7D018DB92B600E4DDFB /* DGCConversionUtils.h */,
+				91A8A7D118DB92B600E4DDFB /* DGCConversionUtils.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -295,6 +300,7 @@
 				9121209918D0D7850079F84A /* DGCAppDelegate.m in Sources */,
 				912120C218D0E1CC0079F84A /* DGCTimerDetailViewController.m in Sources */,
 				917761C318D74FAF006D70C9 /* DGCTimerEditViewController.m in Sources */,
+				91A8A7D218DB92B600E4DDFB /* DGCConversionUtils.m in Sources */,
 				91A8A7CF18DA3B3600E4DDFB /* DGCTimerModel.m in Sources */,
 				91A8A7CC18DA387100E4DDFB /* CoffeeTime.xcdatamodeld in Sources */,
 				917761C618D75B66006D70C9 /* DGCTimerListViewController.m in Sources */,

@@ -13,7 +13,10 @@
 
 @dynamic name;
 @dynamic duration;
-@dynamic type;
 @dynamic displayOrder;
+@dynamic coffeeToWaterRatio;
+@dynamic water;
+@dynamic coffeeDisplayUnits;
+@dynamic waterDisplayUnits;
 
 @end

@@ -9,10 +9,10 @@
 #import "DGCTimerListViewController.h"
 #import "DGCTimerDetailViewController.h"
 #import "DGCTimerEditViewController.h"
+#import "DGCConversionUtils.h"
 
 enum {
     DGCTimerListCoffeeSection = 0,
-    DGCTimerListTeaSection,
     DGCTimerListNumberOfSections
 };
 
@@ -79,6 +79,8 @@ enum {
     
     DGCTimerModel *timerModel = [self timerModelForIndexPath:indexPath];
     cell.textLabel.text = timerModel.name;
+    cell.textLabel.font = [UIFont systemFontOfSize:24];
+
     
     return cell;
 }
@@ -87,11 +89,7 @@ enum {
 {
     if (section == DGCTimerListCoffeeSection)
     {
-        return @"Coffees";
-    }
-    else if (section == DGCTimerListTeaSection)
-    {
-        return @"Teas";
+        return @"Brewing Recipes";
     }
     // This shouldn't happen
     return @"";
@@ -128,11 +126,18 @@ enum {
             DGCTimerModel *model = [NSEntityDescription insertNewObjectForEntityForName:@"DGCTimerModel"
                                                                  inManagedObjectContext:managedObjectContext];
             
+            // initialize new model with some default values
+            model.coffeeToWaterRatio = 0.1f;
+            model.duration = 240;
+            model.waterDisplayUnits = DGCFluidOuncesUnit;
+            model.coffeeDisplayUnits = DGCGramsUnit;
+            
             UINavigationController *navController = segue.destinationViewController;
             DGCTimerEditViewController *viewController = (DGCTimerEditViewController *)navController.topViewController;
             viewController.creatingNewTimer = YES;
             viewController.delegate = self;
             viewController.timerModel = model;
+            
         }
     }
 }
@@ -248,10 +253,6 @@ enum {
         NSInteger numberOfCells = [self.fetchedResultsController.sections[DGCTimerListCoffeeSection] numberOfObjects];
         return [NSIndexPath indexPathForRow:numberOfCells - 1 inSection:DGCTimerListCoffeeSection];
     }
-    else if (sourceIndexPath.section == DGCTimerListTeaSection)
-    {
-        return [NSIndexPath indexPathForRow:0 inSection:DGCTimerListTeaSection];
-    }
     
     return sourceIndexPath;
 }
@@ -268,11 +269,10 @@ enum {
     if (!_fetchedResultsController)
     {
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"DGCTimerModel"];
-        fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"type" ascending:YES],
-                                         [NSSortDescriptor sortDescriptorWithKey:@"displayOrder" ascending:YES]];
+        fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"displayOrder" ascending:YES]];
         NSManagedObjectContext *managedObjectConext =
         [(DGCAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-        _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:managedObjectConext sectionNameKeyPath:@"type" cacheName:nil];
+        _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:managedObjectConext sectionNameKeyPath:nil cacheName:nil];
         _fetchedResultsController.delegate = self;
     }
     

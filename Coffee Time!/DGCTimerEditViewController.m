@@ -7,10 +7,10 @@
 //
 
 #import "DGCTimerEditViewController.h"
+#import "DGCConversionUtils.h"
 
 @interface DGCTimerEditViewController ()
 
-@property (nonatomic, weak) IBOutlet UISegmentedControl *timerTypeSegmentedControl;
 @property (nonatomic, strong) NSArray *minuteArray;
 @property (nonatomic, strong) NSArray *secondsArray;
 
@@ -30,7 +30,7 @@
 -(NSArray *)genArrayOverRange:(NSInteger)start end:(NSInteger)end{
     NSMutableArray *array = [NSMutableArray array];
     for(int i=start; i<=end; i++) {
-        [array addObject:@(i)]; // @() is the modern objective-c syntax, to box the value into an NSNumber.
+        [array addObject:@(i)];
     }
     return array;
 }
@@ -57,15 +57,27 @@
     [self.durationPicker selectRow:numberOfSeconds inComponent:1 animated:NO];
     
     self.nameField.text = self.timerModel.name;
-    if (self.timerModel.type == DGCTimerModelTypeCoffee)
+    self.ratioField.keyboardType = UIKeyboardTypeDecimalPad;
+    self.ratioField.text = [NSString stringWithFormat:@"%1.4f", self.timerModel.coffeeToWaterRatio];
+    switch (self.timerModel.waterDisplayUnits)
     {
-        self.timerTypeSegmentedControl.selectedSegmentIndex = 0;
-    }
-    else
-    {
-        self.timerTypeSegmentedControl.selectedSegmentIndex = 1;
+        case DGCFluidOuncesUnit:
+            self.waterUnitsControl.selectedSegmentIndex = 0;
+            break;
+        case DGCGramsUnit:
+            self.waterUnitsControl.selectedSegmentIndex = 1;
+            break;
     }
     
+    switch (self.timerModel.coffeeDisplayUnits)
+    {
+        case DGCGramsUnit:
+            self.coffeeUnitsControl.selectedSegmentIndex = 0;
+            break;
+        case DGCTableSpoonsUnit:
+            self.coffeeUnitsControl.selectedSegmentIndex = 1;
+            break;
+    }
 }
 
 - (void)updateLabelsWithMinutes:(NSInteger)numberOfMinutes
@@ -104,19 +116,32 @@
 
 -(void)saveModel
 {
-    DGCTimerModelType type;
-    
-    if (self.timerTypeSegmentedControl.selectedSegmentIndex == 0)
-    {
-        type = DGCTimerModelTypeCoffee;
-    }
-    else
-    {
-        type = DGCTimerModelTypeTea;
-    }
     self.timerModel.name = self.nameField.text;
-    self.timerModel.duration = [self.durationPicker selectedRowInComponent:0]* 60 + [self.durationPicker selectedRowInComponent:1];
-    self.timerModel.type = type;
+    self.timerModel.duration = (int)[self.durationPicker selectedRowInComponent:0]* 60 + (int)[self.durationPicker selectedRowInComponent:1];
+    if (self.ratioField.text != nil)
+    {
+        self.timerModel.coffeeToWaterRatio = [self.ratioField.text floatValue];
+    }
+    switch (self.waterUnitsControl.selectedSegmentIndex)
+    {
+        case 0:
+            self.timerModel.waterDisplayUnits = DGCFluidOuncesUnit;
+            break;
+        case 1:
+            self.timerModel.waterDisplayUnits = DGCGramsUnit;
+            break;
+    }
+    
+    switch (self.coffeeUnitsControl.selectedSegmentIndex)
+    {
+        case 0:
+            self.timerModel.coffeeDisplayUnits = DGCGramsUnit;
+            break;
+        case 1:
+            self.timerModel.coffeeDisplayUnits = DGCTableSpoonsUnit;
+            break;
+    }
+    
 }
 
 

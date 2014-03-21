@@ -8,11 +8,18 @@
 
 #import "DGCTimerDetailViewController.h"
 #import "DGCTimerEditViewController.h"
+#import "DGCConversionUtils.h"
 
 @interface DGCTimerDetailViewController ()
 
 @property (nonatomic, weak) IBOutlet UILabel *countdownLabel;
 @property (nonatomic, weak) IBOutlet UIButton *startStopButton;
+@property (nonatomic, weak) IBOutlet UILabel *waterAmountLabel;
+@property (nonatomic, weak) IBOutlet UILabel *waterUnitsLabel;
+@property (nonatomic, weak) IBOutlet UILabel *coffeeAmountLabel;
+@property (nonatomic, weak) IBOutlet UILabel *coffeeUnitsLabel;
+@property (nonatomic, weak) IBOutlet UISlider *waterAmountSlider;
+
 
 @property (nonatomic, weak) NSTimer *timer;
 @property (nonatomic, assign) NSInteger timeRemaining;
@@ -46,6 +53,9 @@
     NSLog(@"viewDidLoad for detail view called");
     NSInteger countdownRemaining = self.timerModel.duration;
     NSLog(@"Timer duration: %d", self.timerModel.duration);
+    NSLog(@"Timer water: %d", self.timerModel.water);
+    NSLog(@"Timer ratio: %f", self.timerModel.coffeeToWaterRatio);
+    NSLog(@"Timer water display unit: %d", self.timerModel.waterDisplayUnits);
     if (self.timer)
     {
         countdownRemaining = self.timeRemaining;
@@ -54,6 +64,9 @@
     self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
                                countdownRemaining / 60,
                                countdownRemaining % 60];
+    
+    [self updateWaterCoffeeLabels];
+
     
     [self.timerModel addObserver:self
                       forKeyPath:@"duration"
@@ -65,10 +78,62 @@
                          context:nil];
 }
 
+-(void)updateWaterCoffeeLabels
+{
+    NSLog(@"update water coffee labels");
+    DGCUnits waterUnits = self.timerModel.waterDisplayUnits;
+    DGCUnits coffeeUnits = self.timerModel.coffeeDisplayUnits;
+    // slider always uses fl oz internally, convert and update UI if user has selected grams for display;
+    NSInteger waterFlOz = (NSInteger) self.waterAmountSlider.value;
+    NSInteger waterGrams = [DGCConversionUtils convertFluidOuncesToGrams:waterFlOz];
+    switch (waterUnits)
+    {
+        case DGCFluidOuncesUnit:
+            self.waterUnitsLabel.text = @"fl oz";
+            self.waterAmountLabel.text = [NSString stringWithFormat:@"%d", waterFlOz];
+            break;
+        case DGCGramsUnit:
+            self.waterUnitsLabel.text = @"g";
+            self.waterAmountLabel.text = [NSString stringWithFormat:@"%d", waterGrams];
+            break;
+        default:
+            break;
+    }
+    NSInteger coffeeGrams = (NSInteger)roundf(waterGrams * self.timerModel.coffeeToWaterRatio);
+    NSLog(@"coffeeGrams: %d", coffeeGrams);
+    switch (coffeeUnits)
+    {
+        case DGCGramsUnit:
+            self.coffeeUnitsLabel.text = @"g";
+            self.coffeeAmountLabel.text = [NSString stringWithFormat:@"%d", coffeeGrams];
+            break;
+        case DGCTableSpoonsUnit:
+            self.coffeeUnitsLabel.text = @"tbsp";
+            self.coffeeAmountLabel.text = [NSString stringWithFormat:@"%1.2f", [DGCConversionUtils convertGramsToTablespoons:coffeeGrams]];
+            break;
+        default:
+            break;
+            
+    }
+    
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)toggleEditButton:(BOOL)show
+{
+    if (show)
+    {
+        self.navigationItem.rightBarButtonItem.enabled = true;
+    }
+    else
+    {
+        self.navigationItem.rightBarButtonItem.enabled = false;
+    }
 }
 
 -(IBAction)buttonPressed:(id)sender
@@ -78,6 +143,7 @@
         // Timer is running and button is pressed. Stop timer.
         
         [self.navigationItem setHidesBackButton:NO animated:YES];
+        [self toggleEditButton:YES];
         self.timeRemaining = self.timerModel.duration;
         self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
                                     self.timeRemaining / 60,
@@ -91,6 +157,8 @@
     else
     {
         [self.navigationItem setHidesBackButton:YES animated:YES];
+        [self toggleEditButton:NO];
+        
         [self.startStopButton setTitle:@"Stop" forState:UIControlStateNormal];
         [self.startStopButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         self.timeRemaining = self.timerModel.duration;
@@ -108,6 +176,11 @@
                                                     userInfo:nil
                                                      repeats:YES];
     }
+}
+
+-(IBAction)sliderValueChanged:(id)sender
+{
+    [self updateWaterCoffeeLabels];
 }
 
 -(void)timerFired:(NSTimer *)timer
@@ -137,6 +210,8 @@
         NSLog(@"timerFired -> Ending backgroundTaskId: %d", self.backgroundTaskIdentifier);
         [self.timer invalidate];
         [self.navigationItem setHidesBackButton:NO animated:YES];
+        self.editButtonItem.enabled = true;
+        self.editButtonItem.title = @"Edit";
     }
 }
 

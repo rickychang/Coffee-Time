@@ -9,17 +9,15 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-typedef enum : int32_t {
-    DGCTimerModelTypeCoffee = 0,
-    DGCTimerModelTypeTea
-}DGCTimerModelType;
-
 
 @interface DGCTimerModel : NSManagedObject
 
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic) int32_t duration;
-@property (nonatomic) int32_t type;
 @property (nonatomic) int32_t displayOrder;
+@property (nonatomic) float coffeeToWaterRatio;
+@property (nonatomic) int32_t water;
+@property (nonatomic) int32_t coffeeDisplayUnits;
+@property (nonatomic) int32_t waterDisplayUnits;
 
 @end

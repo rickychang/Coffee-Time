@@ -13,8 +13,7 @@
 @class DGCTimerEditViewController;
 
 typedef enum {
-    DGCTimerEditViewControllerTimerTypeCoffee = 0,
-    DGCTimerEditViewControllerTimerTypeTea
+    DGCTimerEditViewControllerTimerTypeCoffee = 0
 }DGCTimerEditViewControllerTimerType;
 
 @protocol DGCTimerEditViewControllerDelegate <NSObject>
@@ -28,9 +27,12 @@ typedef enum {
 
 @property (nonatomic, strong) DGCTimerModel *timerModel;
 @property (nonatomic, weak) IBOutlet UITextField *nameField;
+@property (nonatomic, weak) IBOutlet UITextField *ratioField;
 @property (nonatomic, weak) IBOutlet UILabel *minutesLabel;
 @property (nonatomic, weak) IBOutlet UILabel *secondsLabel;
 @property (nonatomic, weak) IBOutlet UIPickerView *durationPicker;
+@property (nonatomic, weak) IBOutlet UISegmentedControl *waterUnitsControl;
+@property (nonatomic, weak) IBOutlet UISegmentedControl *coffeeUnitsControl;
 
 @property (nonatomic, assign) BOOL creatingNewTimer;
 @property (nonatomic, weak) id <DGCTimerEditViewControllerDelegate> delegate;

@@ -12,5 +12,6 @@
 @interface DGCTimerDetailViewController : UIViewController
 
 @property (nonatomic, weak) DGCTimerModel *timerModel;
+-(IBAction)sliderValueChanged:(id)sender;
 
 @end
