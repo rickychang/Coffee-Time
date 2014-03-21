@@ -61,6 +61,8 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="done"/>
                                                 <connections>
+                                                    <action selector="textFieldDidBeginEditing:" destination="raO-Mu-qKg" eventType="editingDidBegin" id="hHe-wZ-Lrs"/>
+                                                    <action selector="textFieldDidEndEditing:" destination="raO-Mu-qKg" eventType="editingDidEnd" id="xC9-3F-NNE"/>
                                                     <action selector="textFieldReturn:" destination="raO-Mu-qKg" eventType="editingDidEndOnExit" id="HC7-9U-Kif"/>
                                                 </connections>
                                             </textField>
@@ -70,6 +72,8 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="done"/>
                                                 <connections>
+                                                    <action selector="textFieldDidBeginEditing:" destination="raO-Mu-qKg" eventType="editingDidBegin" id="M0g-VQ-qwq"/>
+                                                    <action selector="textFieldDidEndEditing:" destination="raO-Mu-qKg" eventType="editingDidEnd" id="Tvg-Zg-Qmg"/>
                                                     <action selector="textFieldReturn:" destination="raO-Mu-qKg" eventType="editingDidEndOnExit" id="euy-9H-JIQ"/>
                                                 </connections>
                                             </textField>

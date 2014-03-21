@@ -39,6 +39,12 @@
 {
     [super viewDidLoad];
     
+    // Keyboard dismissal and scrolling setup code
+    [self registerForKeyboardNotifications];
+    UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(dismissKeyboard)];
+    tapGesture.cancelsTouchesInView = NO;
+    [self.scrollView addGestureRecognizer:tapGesture];
+    
     self.minuteArray = [self genArrayOverRange:0 end:9];
     self.secondsArray = [self genArrayOverRange:0 end:59];
     
@@ -88,19 +94,6 @@
     self.scrollView.contentSize = self.contentView.bounds.size;
 }
 
-- (void)updateLabelsWithMinutes:(NSInteger)numberOfMinutes
-                        seconds:(NSInteger)numberOfSeconds
-{
-    if (numberOfMinutes == 1)
-    {
-        self.minutesLabel.text = @"Minute";
-    }
-    else
-    {
-        self.minutesLabel.text = @"Minutes";
-    }
-}
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -120,6 +113,44 @@
     [self.delegate timerEditViewControllerDidSaveTimerModel:self];
     [self.presentingViewController
      dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)registerForKeyboardNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+    
+}
+
+- (void)keyboardWasShown:(NSNotification*)aNotification
+{
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
+    self.scrollView.contentInset = contentInsets;
+    self.scrollView.scrollIndicatorInsets = contentInsets;
+    
+    // If active text field is hidden by keyboard, scroll it so it's visible
+    // Your app might not need or want this behavior.
+    CGRect aRect = self.view.frame;
+    aRect.size.height -= kbSize.height;
+    if (!CGRectContainsPoint(aRect, self.activeField.frame.origin) ) {
+        [self.scrollView scrollRectToVisible:self.activeField.frame animated:YES];
+    }
+}
+
+// Called when the UIKeyboardWillHideNotification is sent
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+{
+    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+    self.scrollView.contentInset = contentInsets;
+    self.scrollView.scrollIndicatorInsets = contentInsets;
 }
 
 -(void)saveModel
@@ -213,6 +244,23 @@
 {
     self.title = self.nameField.text;
     [sender resignFirstResponder];
+}
+
+- (IBAction)textFieldDidBeginEditing:(UITextField *)textField
+{
+    NSLog(@"didBeginEditing");
+    self.activeField = textField;
+}
+
+- (IBAction)textFieldDidEndEditing:(UITextField *)textField
+{
+    NSLog(@"didEndEditing");
+    self.activeField = nil;
+}
+
+-(void)dismissKeyboard {
+    NSLog(@"dismissKeyboard");
+    [self.activeField resignFirstResponder];
 }
 
 

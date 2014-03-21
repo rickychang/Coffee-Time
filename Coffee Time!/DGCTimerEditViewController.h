@@ -35,6 +35,7 @@ typedef enum {
 @property (nonatomic, weak) IBOutlet UISegmentedControl *coffeeUnitsControl;
 @property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, weak) IBOutlet UIView *contentView;
+@property (nonatomic, weak) IBOutlet UITextField *activeField;
 
 @property (nonatomic, assign) BOOL creatingNewTimer;
 @property (nonatomic, weak) id <DGCTimerEditViewControllerDelegate> delegate;
