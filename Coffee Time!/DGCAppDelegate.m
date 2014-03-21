@@ -8,6 +8,7 @@
 
 #import "DGCAppDelegate.h"
 #import "DGCTimerModel.h"
+#import "DGCConversionUtils.h"
 
 @implementation DGCAppDelegate
 
@@ -32,15 +33,27 @@
                 case 0:
                     model.name = NSLocalizedString(@"French Press", @"Default French Press coffee name");
                     model.duration = 240;
+                    model.waterDisplayUnits = DGCFluidOuncesUnit;
+                    model.water = 16;
+                    model.coffeeDisplayUnits = DGCGramsUnit;
+                    model.coffeeToWaterRatio = 0.0718547979377f;
                     break;
                     
                 case 1:
                     model.name = NSLocalizedString(@"Pour Over", @"Default Pour Over coffee name");
                     model.duration = 180;
+                    model.waterDisplayUnits = DGCFluidOuncesUnit;
+                    model.water = 6;
+                    model.coffeeDisplayUnits = DGCGramsUnit;
+                    model.coffeeToWaterRatio = 0.06829268292683f;
                     break;
                 case 2:
-                    model.name = NSLocalizedString(@"Green Tea", @"Default Green Tea tea name");
-                    model.duration = 300;
+                    model.name = NSLocalizedString(@"Aeropress", @"Default Aeropress name");
+                    model.duration = 60;
+                    model.waterDisplayUnits = DGCFluidOuncesUnit;
+                    model.water = 6;
+                    model.coffeeDisplayUnits = DGCGramsUnit;
+                    model.coffeeToWaterRatio = 0.06829268292683f;
                     break;
             }
         }

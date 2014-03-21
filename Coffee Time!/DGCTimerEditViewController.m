@@ -115,6 +115,41 @@
      dismissViewControllerAnimated:YES completion:nil];
 }
 
+-(IBAction)coffeeUnitsChanged:(id)sender
+{
+    NSLog(@"Coffee units changed.");
+    
+}
+
+-(IBAction)waterUnitsChanged:(id)sender
+{
+    NSLog(@"waterUnitsChanged.");
+}
+
+-(DGCUnits)coffeeUnitsFromSegmentIndex:(NSInteger)index
+{
+    if (index == 0)
+    {
+        return DGCGramsUnit;
+    }
+    else
+    {
+        return DGCTableSpoonsUnit;
+    }
+}
+
+-(DGCUnits)waterUnitsFromSegmentIndex:(NSInteger)index
+{
+    if (index == 0)
+    {
+        return DGCFluidOuncesUnit;
+    }
+    else
+    {
+        return DGCGramsUnit;
+    }
+}
+
 - (void)registerForKeyboardNotifications
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -161,26 +196,29 @@
     {
         self.timerModel.coffeeToWaterRatio = [self.ratioField.text floatValue];
     }
-    switch (self.waterUnitsControl.selectedSegmentIndex)
+    DGCUnits prevWaterUnits = self.timerModel.waterDisplayUnits;
+    DGCUnits curWaterUnits = [self waterUnitsFromSegmentIndex:self.waterUnitsControl.selectedSegmentIndex];
+    NSInteger prevWaterAmount = self.timerModel.water;
+    NSLog(@"prevWater: %d", prevWaterAmount);
+    if (prevWaterUnits != curWaterUnits)
     {
-        case 0:
-            self.timerModel.waterDisplayUnits = DGCFluidOuncesUnit;
-            break;
-        case 1:
-            self.timerModel.waterDisplayUnits = DGCGramsUnit;
-            break;
+        if (curWaterUnits == DGCGramsUnit)
+        {
+            NSInteger curWaterAmount = [DGCConversionUtils convertFluidOuncesToGrams:prevWaterAmount];
+            NSLog(@"curWater: %d", curWaterAmount);
+            self.timerModel.water = curWaterAmount;
+        }
+        else
+        {
+            NSInteger curWaterAmount = [DGCConversionUtils convertGramsToFluidOunces:prevWaterAmount];
+            NSLog(@"curWater: %d", curWaterAmount);
+            self.timerModel.water = curWaterAmount;
+        }
     }
+    self.timerModel.waterDisplayUnits = curWaterUnits;
     
-    switch (self.coffeeUnitsControl.selectedSegmentIndex)
-    {
-        case 0:
-            self.timerModel.coffeeDisplayUnits = DGCGramsUnit;
-            break;
-        case 1:
-            self.timerModel.coffeeDisplayUnits = DGCTableSpoonsUnit;
-            break;
-    }
-    
+    DGCUnits curCoffeeUnits = [self coffeeUnitsFromSegmentIndex:self.coffeeUnitsControl.selectedSegmentIndex];
+    self.timerModel.coffeeDisplayUnits = curCoffeeUnits;
 }
 
 

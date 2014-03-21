@@ -65,7 +65,7 @@
                                countdownRemaining / 60,
                                countdownRemaining % 60];
     
-    [self updateWaterCoffeeLabels];
+    [self updateWaterCoffeeUI];
 
     
     [self.timerModel addObserver:self
@@ -81,26 +81,34 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self updateWaterCoffeeLabels];
+    [self updateWaterCoffeeUI];
 }
 
--(void)updateWaterCoffeeLabels
+-(void)updateWaterCoffeeUI
 {
-    NSLog(@"update water coffee labels");
+    NSLog(@"update water coffee UI");
     DGCUnits waterUnits = self.timerModel.waterDisplayUnits;
     DGCUnits coffeeUnits = self.timerModel.coffeeDisplayUnits;
-    // slider always uses fl oz internally, convert and update UI if user has selected grams for display;
-    NSInteger waterFlOz = (NSInteger) self.waterAmountSlider.value;
-    NSInteger waterGrams = [DGCConversionUtils convertFluidOuncesToGrams:waterFlOz];
+    NSInteger waterAmount = (NSInteger) self.timerModel.water;
+    NSLog(@"water amount: %d", waterAmount);
+    NSInteger waterGrams = 0;
     switch (waterUnits)
     {
         case DGCFluidOuncesUnit:
+            self.waterAmountSlider.minimumValue = 0;
+            self.waterAmountSlider.maximumValue = 32;
+            self.waterAmountSlider.value = waterAmount;
             self.waterUnitsLabel.text = @"fl oz";
-            self.waterAmountLabel.text = [NSString stringWithFormat:@"%d", waterFlOz];
+            self.waterAmountLabel.text = [NSString stringWithFormat:@"%d", waterAmount];
+            waterGrams = [DGCConversionUtils convertFluidOuncesToGrams:waterAmount];
             break;
         case DGCGramsUnit:
+            self.waterAmountSlider.minimumValue = 0;
+            self.waterAmountSlider.maximumValue = 1000;
+            self.waterAmountSlider.value = waterAmount;
             self.waterUnitsLabel.text = @"g";
-            self.waterAmountLabel.text = [NSString stringWithFormat:@"%d", waterGrams];
+            waterGrams = waterAmount;
+            self.waterAmountLabel.text = [NSString stringWithFormat:@"%d", waterAmount];
             break;
         default:
             break;
@@ -186,7 +194,8 @@
 
 -(IBAction)sliderValueChanged:(id)sender
 {
-    [self updateWaterCoffeeLabels];
+    self.timerModel.water = self.waterAmountSlider.value;
+    [self updateWaterCoffeeUI];
 }
 
 -(void)timerFired:(NSTimer *)timer

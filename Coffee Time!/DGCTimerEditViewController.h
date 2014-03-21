@@ -44,5 +44,7 @@ typedef enum {
 -(IBAction)cancelButtonWasPressed:(id)sender;
 -(IBAction)doneButtonWasPressed:(id)sender;
 -(IBAction)textFieldReturn:(id)sender;
+-(IBAction)coffeeUnitsChanged:(id)sender;
+-(IBAction)waterUnitsChanged:(id)sender;
 
 @end

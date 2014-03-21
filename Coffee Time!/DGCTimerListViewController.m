@@ -2,7 +2,7 @@
 //  DGCTimerListViewController.m
 //  Coffee Time!
 //
-//  Created by RIcky Chang on 3/17/14.
+//  Created by Ricky Chang on 3/17/14.
 //  Copyright (c) 2014 RIcky Chang. All rights reserved.
 //
 
