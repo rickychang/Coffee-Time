@@ -16,7 +16,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    NSLog(@"Application has launched.");
     
     BOOL hasLoadedDefaultModels = [[NSUserDefaults standardUserDefaults]
                                    boolForKey:@"loadedDefaults"];
@@ -50,8 +49,8 @@
                 case 2:
                     model.name = NSLocalizedString(@"Aeropress", @"Default Aeropress name");
                     model.duration = 60;
-                    model.waterDisplayUnits = DGCGramsUnit;
-                    model.water = 100;
+                    model.waterDisplayUnits = DGCFluidOuncesUnit;
+                    model.water = 3;
                     model.coffeeDisplayUnits = DGCGramsUnit;
                     model.coffeeToWaterRatio = 0.29896907216495f;
                     break;

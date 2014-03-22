@@ -24,8 +24,6 @@
 @property (nonatomic, weak) NSTimer *timer;
 @property (nonatomic, strong) UILocalNotification *timerNotification;
 
-@property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
-
 @end
 
 @implementation DGCTimerDetailViewController
@@ -46,7 +44,9 @@
     self.navigationController.navigationBar.barTintColor = [UIColor brownColor];
     self.navigationController.navigationBar.translucent = NO;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
 
+    [self toggleButtonStyle:YES];
 
 	
     self.title = self.timerModel.name;
@@ -150,6 +150,26 @@
     }
 }
 
+-(void)toggleButtonStyle:(BOOL)start
+{
+    if (start)
+    {
+        self.startStopButton.layer.borderColor = Rgb2UIColor(97,193,24).CGColor;
+        self.startStopButton.layer.backgroundColor = Rgb2UIColor(97,193,24).CGColor;
+        self.startStopButton.layer.borderWidth = 1.0;
+        self.startStopButton.layer.cornerRadius = 10;
+        [self.startStopButton setTitle:@"Start" forState:UIControlStateNormal];
+    }
+    else
+    {
+        self.startStopButton.layer.borderColor = Rgb2UIColor(225,6,36).CGColor;
+        self.startStopButton.layer.backgroundColor = Rgb2UIColor(225,6,36).CGColor;
+        self.startStopButton.layer.borderWidth = 1.0;
+        self.startStopButton.layer.cornerRadius = 10;
+        [self.startStopButton setTitle:@"Stop" forState:UIControlStateNormal];
+    }
+}
+
 -(IBAction)buttonPressed:(id)sender
 {
     if (self.timer)
@@ -161,8 +181,7 @@
         self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
                                     self.timerModel.duration / 60,
                                     self.timerModel.duration % 60];
-        [self.startStopButton setTitle:@"Start" forState:UIControlStateNormal];
-        [self.startStopButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+        [self toggleButtonStyle:YES];
         [[UIApplication sharedApplication] cancelLocalNotification:self.timerNotification];
         [self.timer invalidate];
     }
@@ -171,8 +190,7 @@
         [self.navigationItem setHidesBackButton:YES animated:YES];
         [self toggleEditButton:NO];
         
-        [self.startStopButton setTitle:@"Stop" forState:UIControlStateNormal];
-        [self.startStopButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        [self toggleButtonStyle:NO];
         self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
                                     self.timerModel.duration / 60,
                                     self.timerModel.duration % 60];
@@ -181,26 +199,22 @@
                                                     selector:@selector(timerFired:)
                                                     userInfo:nil
                                                      repeats:YES];
-        NSLog(@"Creating local notification");
         UILocalNotification *notification = [[UILocalNotification alloc] init];
-        notification.alertBody = @"Coffee Timer Completed!";
+        notification.alertBody = @"Your coffee is ready.";
         notification.alertAction = @"OK";
         notification.fireDate = [[NSDate date] dateByAddingTimeInterval:self.timerModel.duration];
         notification.soundName = UILocalNotificationDefaultSoundName;
         self.timerNotification = notification;
         [[UIApplication sharedApplication]
          scheduleLocalNotification:notification];
-        NSLog(@"fireDate %@", notification.fireDate);
 
     }
 }
 
 -(NSTimeInterval)timerSecondsRemaining
 {
-    NSLog(@"%@", self.timerNotification);
     if (self.timerNotification)
     {
-        NSLog(@"found valid timer notification");
         NSDate *now = [NSDate date];
         return [self.timerNotification.fireDate timeIntervalSinceDate:now];
     }
@@ -227,7 +241,6 @@
     if (secsRemaining % 10 == 0)
     {
         NSTimeInterval timeRemaining = [self timerSecondsRemaining];
-        NSLog(@"timerSecondsRemaining: %f", timeRemaining);
     }
     if (secsRemaining > 0)
     {
@@ -240,11 +253,7 @@
         self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
                                     self.timerModel.duration / 60,
                                     self.timerModel.duration % 60];
-        NSLog(@"Timer complete.");
-        [self.startStopButton setTitle:@"Start" forState:UIControlStateNormal];
-        [self.startStopButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
-        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
-        NSLog(@"timerFired -> Ending backgroundTaskId: %d", self.backgroundTaskIdentifier);
+        [self toggleButtonStyle:YES];
         [self.timer invalidate];
         [self.navigationItem setHidesBackButton:NO animated:YES];
         [self toggleEditButton:YES];
@@ -333,8 +342,7 @@
             [self.navigationItem setHidesBackButton:YES animated:YES];
             [self toggleEditButton:NO];
             
-            [self.startStopButton setTitle:@"Stop" forState:UIControlStateNormal];
-            [self.startStopButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+            [self toggleButtonStyle:NO];
             self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
                                         self.timerModel.duration / 60,
                                         self.timerModel.duration % 60];
@@ -352,8 +360,7 @@
             self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
                                         self.timerModel.duration / 60,
                                         self.timerModel.duration % 60];
-            [self.startStopButton setTitle:@"Start" forState:UIControlStateNormal];
-            [self.startStopButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+            [self toggleButtonStyle:YES];
         }
     }
     [super decodeRestorableStateWithCoder:coder];

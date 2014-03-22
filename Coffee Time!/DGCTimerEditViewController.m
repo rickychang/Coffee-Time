@@ -98,7 +98,6 @@
 {
     [super viewDidLayoutSubviews];
     [self.scrollView layoutIfNeeded];
-    NSLog(@"contentView size: %f x %f", self.contentView.bounds.size.width, self.contentView.bounds.size.height);
     self.scrollView.contentSize = self.contentView.bounds.size;
 }
 
@@ -121,17 +120,6 @@
     [self.delegate timerEditViewControllerDidSaveTimerModel:self];
     [self.presentingViewController
      dismissViewControllerAnimated:YES completion:nil];
-}
-
--(IBAction)coffeeUnitsChanged:(id)sender
-{
-    NSLog(@"Coffee units changed.");
-    
-}
-
--(IBAction)waterUnitsChanged:(id)sender
-{
-    NSLog(@"waterUnitsChanged.");
 }
 
 -(DGCUnits)coffeeUnitsFromSegmentIndex:(NSInteger)index
@@ -207,19 +195,16 @@
     DGCUnits prevWaterUnits = self.timerModel.waterDisplayUnits;
     DGCUnits curWaterUnits = [self waterUnitsFromSegmentIndex:self.waterUnitsControl.selectedSegmentIndex];
     NSInteger prevWaterAmount = self.timerModel.water;
-    NSLog(@"prevWater: %d", prevWaterAmount);
     if (prevWaterUnits != curWaterUnits)
     {
         if (curWaterUnits == DGCGramsUnit)
         {
             NSInteger curWaterAmount = [DGCConversionUtils convertFluidOuncesToGrams:prevWaterAmount];
-            NSLog(@"curWater: %d", curWaterAmount);
             self.timerModel.water = curWaterAmount;
         }
         else
         {
             NSInteger curWaterAmount = [DGCConversionUtils convertGramsToFluidOunces:prevWaterAmount];
-            NSLog(@"curWater: %d", curWaterAmount);
             self.timerModel.water = curWaterAmount;
         }
     }
@@ -277,12 +262,6 @@
         {
             self.minutesLabel.text = @"Minutes";
         }
-        NSLog(@"selected minute: %@", self.minuteArray[row]);
-        
-    }
-    else
-    {
-        NSLog(@"selected second: %@", self.secondsArray[row]);
     }
 }
 
@@ -294,18 +273,15 @@
 
 - (IBAction)textFieldDidBeginEditing:(UITextField *)textField
 {
-    NSLog(@"didBeginEditing");
     self.activeField = textField;
 }
 
 - (IBAction)textFieldDidEndEditing:(UITextField *)textField
 {
-    NSLog(@"didEndEditing");
     self.activeField = nil;
 }
 
 -(void)dismissKeyboard {
-    NSLog(@"dismissKeyboard");
     [self.activeField resignFirstResponder];
 }
 
