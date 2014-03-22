@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DGCTimerModel.h"
+#import "DGCAppDelegate.h"
 
 @interface DGCTimerDetailViewController : UIViewController
 

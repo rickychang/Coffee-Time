@@ -75,22 +75,33 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    NSLog(@"Application has entered background");
+
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-    NSLog(@"Application has entered background");
+
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    NSLog(@"Application has become active.");
+
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+// state preservation/restoration
+-(BOOL)application:(UIApplication *)application shouldRestoreApplicationState:(NSCoder *)coder
+{
+    return YES;
+}
+
+-(BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder
+{
+    return YES;
 }
 
 -(NSManagedObjectContext *)managedObjectContext

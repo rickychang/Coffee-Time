@@ -241,7 +241,7 @@
 			attributes = {
 				CLASSPREFIX = DGC;
 				LastUpgradeCheck = 0510;
-				ORGANIZATIONNAME = "RIcky Chang";
+				ORGANIZATIONNAME = "Ricky Chang";
 				TargetAttributes = {
 					9121208418D0D7850079F84A = {
 						DevelopmentTeam = 8D25K7ZJBP;

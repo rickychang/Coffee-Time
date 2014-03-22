@@ -18,6 +18,8 @@ enum {
 
 @interface DGCTimerListViewController ()
 
+@property (nonatomic, weak) DGCTimerDetailViewController *detailChildController;
+
 @end
 
 @implementation DGCTimerListViewController
@@ -107,7 +109,7 @@ enum {
         if ([segue.identifier isEqualToString:@"pushDetail"])
         {
             DGCTimerDetailViewController *viewController = segue.destinationViewController;
-            
+            self.detailChildController = viewController;
             viewController.timerModel = model;
         }
         else if ([segue.identifier isEqualToString:@"editDetail"])
@@ -317,6 +319,19 @@ enum {
 {
     if (self.userReorderingCells) return;
     [self.tableView endUpdates];
+}
+
+// state preservation / restoration
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    [coder encodeObject:self.detailChildController forKey:@"DGCTimerListViewDetailChild"];
+    [super encodeRestorableStateWithCoder:coder];
+}
+
+- (void)decodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    self.detailChildController = [coder decodeObjectForKey:@"DGCTimerListViewDetailChild"];
+    [super decodeRestorableStateWithCoder:coder];
 }
 
 

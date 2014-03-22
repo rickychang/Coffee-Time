@@ -219,6 +219,7 @@
     }
     else
     {
+        self.timeRemaining = 0;
         self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
                                     self.timerModel.duration / 60,
                                     self.timerModel.duration % 60];
@@ -230,8 +231,7 @@
         NSLog(@"timerFired -> Ending backgroundTaskId: %d", self.backgroundTaskIdentifier);
         [self.timer invalidate];
         [self.navigationItem setHidesBackButton:NO animated:YES];
-        self.editButtonItem.enabled = true;
-        self.editButtonItem.title = @"Edit";
+        [self toggleEditButton:YES];
     }
 }
 
@@ -277,6 +277,7 @@
 {
     if ([keyPath isEqualToString:@"duration"])
     {
+        // TODO: refactor this code into a method...
         self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
                                     self.timerModel.duration / 60,
                                     self.timerModel.duration % 60];
@@ -286,5 +287,36 @@
         self.title = self.timerModel.name;
     }
 }
+
+// state preservation / restoration
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    NSLog(@"encodeRestorableStateWithCoder");
+    [coder encodeObject:[self.timerModel entity] forKey:@"DGCTimerDetailViewTimerModelEntity"];
+    [coder encodeInteger:self.timeRemaining forKey:@"DGCTimerDetailViewTimeRemaining"];
+    [super encodeRestorableStateWithCoder:coder];
+}
+
+- (void)decodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    NSLog(@"decodeRestorableStateWithCoder");
+    NSManagedObjectContext *managedObjectContext = [(DGCAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    NSEntityDescription *entity = [coder decodeObjectForKey:@"DGCTimerDetailViewTimerModelEntity"];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entity];
+    NSError *error;
+    NSArray *array = [managedObjectContext executeFetchRequest:request error:&error];
+    if (array != nil) {
+        self.timerModel = array[0];
+        self.title = self.timerModel.name;
+        self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
+                                    self.timerModel.duration / 60,
+                                    self.timerModel.duration % 60];
+
+    }
+    self.timeRemaining = [coder decodeIntegerForKey:@"DGCTimerDetailViewTimeRemaining"];
+    [super decodeRestorableStateWithCoder:coder];
+}
+
 
 @end
