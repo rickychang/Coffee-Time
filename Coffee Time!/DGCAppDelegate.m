@@ -62,6 +62,20 @@
     return YES;
 }
 
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    NSLog(@"didReceiveLocalNotification");
+    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
+    {
+        [[[UIAlertView alloc] initWithTitle:@"Coffee Time!"
+                                    message:notification.alertBody
+                                   delegate:nil
+                          cancelButtonTitle:nil
+                          otherButtonTitles:@"OK", nil] show];
+    }
+    [notification setFireDate:nil];
+}
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     NSLog(@"Application has resigned active.");

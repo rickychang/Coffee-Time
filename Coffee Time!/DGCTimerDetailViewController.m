@@ -22,7 +22,7 @@
 
 
 @property (nonatomic, weak) NSTimer *timer;
-@property (nonatomic, assign) NSInteger timeRemaining;
+@property (nonatomic, strong) UILocalNotification *timerNotification;
 
 @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
 
@@ -58,7 +58,7 @@
     NSLog(@"Timer water display unit: %d", self.timerModel.waterDisplayUnits);
     if (self.timer)
     {
-        countdownRemaining = self.timeRemaining;
+        countdownRemaining = lround([self timerSecondsRemaining]);
     }
 
     self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
@@ -158,14 +158,12 @@
         
         [self.navigationItem setHidesBackButton:NO animated:YES];
         [self toggleEditButton:YES];
-        self.timeRemaining = self.timerModel.duration;
         self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
-                                    self.timeRemaining / 60,
-                                    self.timeRemaining % 60];
+                                    self.timerModel.duration / 60,
+                                    self.timerModel.duration % 60];
         [self.startStopButton setTitle:@"Start" forState:UIControlStateNormal];
         [self.startStopButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
-        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
-        NSLog(@"Ending backgroundTaskId: %d", self.backgroundTaskIdentifier);
+        [[UIApplication sharedApplication] cancelLocalNotification:self.timerNotification];
         [self.timer invalidate];
     }
     else
@@ -175,20 +173,40 @@
         
         [self.startStopButton setTitle:@"Stop" forState:UIControlStateNormal];
         [self.startStopButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        self.timeRemaining = self.timerModel.duration;
         self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
-                                    self.timeRemaining / 60,
-                                    self.timeRemaining % 60];
-        self.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-            NSInteger timeRemaining = [[UIApplication sharedApplication] backgroundTimeRemaining];
-            NSLog(@"Killing background task: background time remaining: %d", timeRemaining);
-        }];
-        NSLog(@"Created backgroundTaskId: %d", self.backgroundTaskIdentifier);
+                                    self.timerModel.duration / 60,
+                                    self.timerModel.duration % 60];
         self.timer = [NSTimer scheduledTimerWithTimeInterval:1
                                                       target:self
                                                     selector:@selector(timerFired:)
                                                     userInfo:nil
                                                      repeats:YES];
+        NSLog(@"Creating local notification");
+        UILocalNotification *notification = [[UILocalNotification alloc] init];
+        notification.alertBody = @"Coffee Timer Completed!";
+        notification.alertAction = @"OK";
+        notification.fireDate = [[NSDate date] dateByAddingTimeInterval:self.timerModel.duration];
+        notification.soundName = UILocalNotificationDefaultSoundName;
+        self.timerNotification = notification;
+        [[UIApplication sharedApplication]
+         scheduleLocalNotification:notification];
+        NSLog(@"fireDate %@", notification.fireDate);
+
+    }
+}
+
+-(NSTimeInterval)timerSecondsRemaining
+{
+    NSLog(@"%@", self.timerNotification);
+    if (self.timerNotification)
+    {
+        NSLog(@"found valid timer notification");
+        NSDate *now = [NSDate date];
+        return [self.timerNotification.fireDate timeIntervalSinceDate:now];
+    }
+    else
+    {
+        return 0.0;
     }
 }
 
@@ -205,26 +223,24 @@
 
 -(void)timerFired:(NSTimer *)timer
 {
-    self.timeRemaining -= 1;
-    if (self.timeRemaining % 20 == 0)
+    NSInteger secsRemaining = lround([self timerSecondsRemaining]);
+    if (secsRemaining % 10 == 0)
     {
-        NSInteger timeRemaining = [[UIApplication sharedApplication] backgroundTimeRemaining];
-        NSLog(@"background time remaining: %d", timeRemaining);
+        NSTimeInterval timeRemaining = [self timerSecondsRemaining];
+        NSLog(@"timerSecondsRemaining: %f", timeRemaining);
     }
-    if (self.timeRemaining > 0)
+    if (secsRemaining > 0)
     {
         self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
-                                    self.timeRemaining / 60,
-                                    self.timeRemaining % 60];
+                                    secsRemaining / 60,
+                                    secsRemaining % 60];
     }
     else
     {
-        self.timeRemaining = 0;
         self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
                                     self.timerModel.duration / 60,
                                     self.timerModel.duration % 60];
         NSLog(@"Timer complete.");
-        [self notifyUser:@"Coffee Timer Completed!"];
         [self.startStopButton setTitle:@"Start" forState:UIControlStateNormal];
         [self.startStopButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
         [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
@@ -232,28 +248,6 @@
         [self.timer invalidate];
         [self.navigationItem setHidesBackButton:NO animated:YES];
         [self toggleEditButton:YES];
-    }
-}
-
--(void)notifyUser:(NSString *)alert
-{
-    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
-    {
-        [[[UIAlertView alloc] initWithTitle:@"Coffee Time!"
-                                    message:alert
-                                   delegate:nil
-                          cancelButtonTitle:nil
-                          otherButtonTitles:@"OK", nil] show];
-    }
-    else
-    {
-        UILocalNotification *notification = [[UILocalNotification alloc] init];
-        notification.alertBody = alert;
-        notification.alertAction = @"OK";
-        notification.fireDate = nil;
-        notification.soundName = UILocalNotificationDefaultSoundName;
-        [[UIApplication sharedApplication]
-         scheduleLocalNotification:notification];
     }
 }
 
@@ -293,13 +287,18 @@
 {
     NSLog(@"encodeRestorableStateWithCoder");
     [coder encodeObject:[self.timerModel entity] forKey:@"DGCTimerDetailViewTimerModelEntity"];
-    [coder encodeInteger:self.timeRemaining forKey:@"DGCTimerDetailViewTimeRemaining"];
+    if (self.timerNotification)
+    {
+        [coder encodeObject:self.timerNotification forKey:@"DGCTimerDetailViewTimeNotification"];
+    }
     [super encodeRestorableStateWithCoder:coder];
 }
 
 - (void)decodeRestorableStateWithCoder:(NSCoder *)coder
 {
     NSLog(@"decodeRestorableStateWithCoder");
+    
+    // Restore state based on timer model.
     NSManagedObjectContext *managedObjectContext = [(DGCAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     NSEntityDescription *entity = [coder decodeObjectForKey:@"DGCTimerDetailViewTimerModelEntity"];
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
@@ -312,9 +311,51 @@
         self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
                                     self.timerModel.duration / 60,
                                     self.timerModel.duration % 60];
+        [self updateWaterCoffeeUI];
+        [self.timerModel addObserver:self
+                          forKeyPath:@"duration"
+                             options:NSKeyValueObservingOptionNew
+                             context:nil];
+        [self.timerModel addObserver:self
+                          forKeyPath:@"name"
+                             options:NSKeyValueObservingOptionNew
+                             context:nil];
 
     }
-    self.timeRemaining = [coder decodeIntegerForKey:@"DGCTimerDetailViewTimeRemaining"];
+    // Restore state based on notification
+    UILocalNotification *timerNotification = (UILocalNotification*)[coder decodeObjectForKey:@"DGCTimerDetailViewTimeNotification"];
+    if (timerNotification)
+    {
+        if ([[NSDate date] earlierDate:timerNotification.fireDate])
+        {
+            // We have a valid notification that hasn't happened yet
+            self.timerNotification = timerNotification;
+            [self.navigationItem setHidesBackButton:YES animated:YES];
+            [self toggleEditButton:NO];
+            
+            [self.startStopButton setTitle:@"Stop" forState:UIControlStateNormal];
+            [self.startStopButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+            self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
+                                        self.timerModel.duration / 60,
+                                        self.timerModel.duration % 60];
+            self.timer = [NSTimer scheduledTimerWithTimeInterval:1
+                                                          target:self
+                                                        selector:@selector(timerFired:)
+                                                        userInfo:nil
+                                                         repeats:YES];
+        }
+        else
+        {
+            // notifcation already fired.
+            [self.navigationItem setHidesBackButton:NO animated:YES];
+            [self toggleEditButton:YES];
+            self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
+                                        self.timerModel.duration / 60,
+                                        self.timerModel.duration % 60];
+            [self.startStopButton setTitle:@"Start" forState:UIControlStateNormal];
+            [self.startStopButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+        }
+    }
     [super decodeRestorableStateWithCoder:coder];
 }
 

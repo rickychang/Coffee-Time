@@ -58,6 +58,14 @@
 	
     NSInteger numberOfMinutes = self.timerModel.duration / 60;
     NSInteger numberOfSeconds = self.timerModel.duration % 60;
+    if (numberOfMinutes == 1)
+    {
+        self.minutesLabel.text = @"Minute";
+    }
+    else
+    {
+        self.minutesLabel.text = @"Minutes";
+    }
     
     [self.durationPicker selectRow:numberOfMinutes inComponent:0 animated:NO];
     [self.durationPicker selectRow:numberOfSeconds inComponent:1 animated:NO];
