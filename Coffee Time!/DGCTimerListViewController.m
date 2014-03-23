@@ -37,7 +37,9 @@ enum {
 {
     [super viewDidLoad];
     
-    self.navigationController.navigationBar.barTintColor = [UIColor brownColor];
+    UIColor *appUIColor = Rgb2UIColor(141, 98, 66);
+    
+    self.navigationController.navigationBar.barTintColor = appUIColor;
     self.navigationController.navigationBar.translucent = NO;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     

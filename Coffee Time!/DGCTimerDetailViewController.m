@@ -41,7 +41,9 @@
 {
     [super viewDidLoad];
     
-    self.navigationController.navigationBar.barTintColor = [UIColor brownColor];
+    UIColor *appUIColor = Rgb2UIColor(141, 98, 66);
+    
+    self.navigationController.navigationBar.barTintColor = appUIColor;
     self.navigationController.navigationBar.translucent = NO;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
@@ -238,10 +240,6 @@
 -(void)timerFired:(NSTimer *)timer
 {
     NSInteger secsRemaining = lround([self timerSecondsRemaining]);
-    if (secsRemaining % 10 == 0)
-    {
-        NSTimeInterval timeRemaining = [self timerSecondsRemaining];
-    }
     if (secsRemaining > 0)
     {
         self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",

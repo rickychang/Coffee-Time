@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DGCTimerModel.h"
+#import "DGCAppDelegate.h"
 
 
 @class DGCTimerEditViewController;
@@ -44,7 +45,5 @@ typedef enum {
 -(IBAction)cancelButtonWasPressed:(id)sender;
 -(IBAction)doneButtonWasPressed:(id)sender;
 -(IBAction)textFieldReturn:(id)sender;
--(IBAction)coffeeUnitsChanged:(id)sender;
--(IBAction)waterUnitsChanged:(id)sender;
 
 @end

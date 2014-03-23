@@ -39,6 +39,8 @@
 {
     [super viewDidLoad];
     
+    UIColor *appUIColor = Rgb2UIColor(141, 98, 66);
+    
     // Keyboard dismissal and scrolling setup code
     [self registerForKeyboardNotifications];
     UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(dismissKeyboard)];
@@ -48,8 +50,11 @@
     self.minuteArray = [self genArrayOverRange:0 end:9];
     self.secondsArray = [self genArrayOverRange:0 end:59];
     
+    self.waterUnitsControl.tintColor = appUIColor;
+    self.coffeeUnitsControl.tintColor = appUIColor;
+        
     
-    self.navigationController.navigationBar.barTintColor = [UIColor brownColor];
+    self.navigationController.navigationBar.barTintColor = appUIColor;
     self.navigationController.navigationBar.translucent = NO;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
