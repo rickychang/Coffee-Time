@@ -64,8 +64,8 @@
     }
 
     self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
-                               countdownRemaining / 60,
-                               countdownRemaining % 60];
+                               (int)countdownRemaining / 60,
+                               (int)countdownRemaining % 60];
     
     [self updateWaterCoffeeUI];
 
@@ -92,7 +92,7 @@
     DGCUnits waterUnits = self.timerModel.waterDisplayUnits;
     DGCUnits coffeeUnits = self.timerModel.coffeeDisplayUnits;
     NSInteger waterAmount = (NSInteger) self.timerModel.water;
-    NSLog(@"water amount: %d", waterAmount);
+    NSLog(@"water amount: %d", (int)waterAmount);
     NSInteger waterGrams = 0;
     switch (waterUnits)
     {
@@ -101,7 +101,7 @@
             self.waterAmountSlider.maximumValue = 32;
             self.waterAmountSlider.value = waterAmount;
             self.waterUnitsLabel.text = @"fl oz";
-            self.waterAmountLabel.text = [NSString stringWithFormat:@"%d", waterAmount];
+            self.waterAmountLabel.text = [NSString stringWithFormat:@"%d", (int)waterAmount];
             waterGrams = [DGCConversionUtils convertFluidOuncesToGrams:waterAmount];
             break;
         case DGCGramsUnit:
@@ -110,18 +110,18 @@
             self.waterAmountSlider.value = waterAmount;
             self.waterUnitsLabel.text = @"g";
             waterGrams = waterAmount;
-            self.waterAmountLabel.text = [NSString stringWithFormat:@"%d", waterAmount];
+            self.waterAmountLabel.text = [NSString stringWithFormat:@"%d", (int)waterAmount];
             break;
         default:
             break;
     }
     NSInteger coffeeGrams = (NSInteger)roundf(waterGrams * self.timerModel.coffeeToWaterRatio);
-    NSLog(@"coffeeGrams: %d", coffeeGrams);
+    NSLog(@"coffeeGrams: %d", (int)coffeeGrams);
     switch (coffeeUnits)
     {
         case DGCGramsUnit:
             self.coffeeUnitsLabel.text = @"g";
-            self.coffeeAmountLabel.text = [NSString stringWithFormat:@"%d", coffeeGrams];
+            self.coffeeAmountLabel.text = [NSString stringWithFormat:@"%d", (int)coffeeGrams];
             break;
         case DGCTableSpoonsUnit:
             self.coffeeUnitsLabel.text = @"tbsp";
@@ -243,8 +243,8 @@
     if (secsRemaining > 0)
     {
         self.countdownLabel.text = [NSString stringWithFormat:@"%d:%02d",
-                                    secsRemaining / 60,
-                                    secsRemaining % 60];
+                                    (int)secsRemaining / 60,
+                                    (int)secsRemaining % 60];
     }
     else
     {

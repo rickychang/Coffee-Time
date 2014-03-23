@@ -29,7 +29,7 @@
 
 -(NSArray *)genArrayOverRange:(NSInteger)start end:(NSInteger)end{
     NSMutableArray *array = [NSMutableArray array];
-    for(int i=start; i<=end; i++) {
+    for(long i=start; i<=end; i++) {
         [array addObject:@(i)];
     }
     return array;
@@ -205,12 +205,12 @@
         if (curWaterUnits == DGCGramsUnit)
         {
             NSInteger curWaterAmount = [DGCConversionUtils convertFluidOuncesToGrams:prevWaterAmount];
-            self.timerModel.water = curWaterAmount;
+            self.timerModel.water = (int)curWaterAmount;
         }
         else
         {
             NSInteger curWaterAmount = [DGCConversionUtils convertGramsToFluidOunces:prevWaterAmount];
-            self.timerModel.water = curWaterAmount;
+            self.timerModel.water = (int)curWaterAmount;
         }
     }
     self.timerModel.waterDisplayUnits = curWaterUnits;
