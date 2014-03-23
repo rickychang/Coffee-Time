@@ -292,7 +292,6 @@
 // state preservation / restoration
 - (void)encodeRestorableStateWithCoder:(NSCoder *)coder
 {
-    NSLog(@"encodeRestorableStateWithCoder");
     [coder encodeObject:[self.timerModel entity] forKey:@"DGCTimerDetailViewTimerModelEntity"];
     if (self.timerNotification)
     {
@@ -302,9 +301,7 @@
 }
 
 - (void)decodeRestorableStateWithCoder:(NSCoder *)coder
-{
-    NSLog(@"decodeRestorableStateWithCoder");
-    
+{    
     // Restore state based on timer model.
     NSManagedObjectContext *managedObjectContext = [(DGCAppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     NSEntityDescription *entity = [coder decodeObjectForKey:@"DGCTimerDetailViewTimerModelEntity"];
